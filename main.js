@@ -1,8 +1,8 @@
 // PRODUCTOS
 const products = [
-    { id: 1, name: "RoyceDerm Face cream - Seborrheic Dermatitis", price: 329, image: "/medios/Imagenes/royce.jpeg", color: "Silber" },
-    { id: 2, name: "Sumvx Hair Serum - Cebolla y Romero", price: 329, image: "/medios/Imagenes/biotinrohs.jpeg", color: "Schwarz" },
-    { id: 3, name: "KL Ranko Cream - Moisturizing", price: 349, image: "/medios/Imagenes/rankomc.jpeg", color: "Gold" },
+    { id: 1, name: "RoyceDerm Face cream", price: 329, image: "/Medios/Imagenes/royce.jpeg", color: "Silber" },
+    { id: 2, name: "Sumvx Hair Serum", price: 329, image: "/Medios/Imagenes/biotinrohs.jpeg", color: "Schwarz" },
+    { id: 3, name: "KL Ranko Cream", price: 349, image: "/Medios/Imagenes/rankomc.jpeg", color: "Gold" },
 ];
 let cart = [];
 
