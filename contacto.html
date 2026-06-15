@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>DMJ – Contacto</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="container">
+    <nav class="navbar">
+        <a href="index.html" class="logo">DMJ</a>
+        <ul class="nav-links">
+            <li><a href="sobre.html">Sobre nosotros</a></li>
+            <li><a href="index.html#productos">Productos</a></li>
+        </ul>
+        <div class="nav-buttons">
+            <button class="cart-icon-btn" id="cartBtn">
+                🛒 <span class="cart-badge" id="cartCount">0</span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="contact-section">
+        <h1>Contactanos</h1>
+        
+        <div class="contact-info">
+            <p class="contact-text">
+                Siempre eres bienvenido para una conversación más cercana. Nuestros servicios están disponibles para usted:
+            </p>
+            <p class="contact-hours">
+                <strong>Lun–Vier:</strong> 9:00 a.m. – 5:00 p.m.<br>
+                <strong>Sab–Dom:</strong> 10:00 a.m. – 4:00 p.m. (UTC-5)
+            </p>
+            <p class="contact-trust">
+                La confianza es la base de toda relación. Estamos para ayudarte en este proceso.
+            </p>
+        </div>
+
+        <!-- Formulario de contacto con imagen de fondo -->
+        <div class="contact-form-container">
+            <form id="contactForm" class="contact-form">
+                <div class="form-group">
+                    <label>Tu Nombre</label>
+                    <input type="text" id="contactName" placeholder="Escribe tu nombre completo" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Tu correo electrónico</label>
+                    <input type="email" id="contactEmail" placeholder="tucorreo@ejemplo.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Cuéntanos por qué nos escribes</label>
+                    <textarea id="contactMessage" rows="6" placeholder="Escribe aquí tu mensaje..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Completa este campo</label>
+                    <input type="text" id="contactExtra" placeholder="¿Cómo nos conociste?">
+                </div>
+                
+                <div class="form-buttons">
+                    <button type="submit" class="btn-dark">Enviar</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="contact-back-link">
+            <a href="index.html" class="back-link">← Volver a la tienda</a>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>© 2026 DMJ – Descubra el futuro del cuidado de la piel.</p>
+        <p>Todos los derechos reservados</p>
+    </div>
+</div>
+
+<!-- CART SIDEBAR -->
+<div id="cartSidebar" class="cart-sidebar">
+    <div class="cart-sidebar-header">
+        <h2>Carrito</h2>
+        <button class="close-cart" id="closeCartBtn">&times;</button>
+    </div>
+    <div class="cart-sidebar-content" id="cartSidebarContent">
+        <div class="empty-cart">
+            <p>🛒 Su carrito está vacío</p>
+            <button class="btn-dark continue-shopping">Seguir comprando</button>
+        </div>
+    </div>
+</div>
+
+<div id="cartOverlay" class="cart-overlay"></div>
+
+<div id="checkoutModal" class="modal">
+    <div class="modal-content">
+        <span class="close-checkout">&times;</span>
+        <h2>Finalizar pedido</h2>
+        <form id="checkoutForm">
+            <div class="form-group">
+                <label>Nombre *</label>
+                <input type="text" id="customerName" required>
+            </div>
+            <div class="form-group">
+                <label>Email *</label>
+                <input type="email" id="customerEmail" required>
+            </div>
+            <div class="form-group">
+                <label>Teléfono</label>
+                <input type="tel" id="customerPhone">
+            </div>
+            <div class="form-group">
+                <label>Dirección *</label>
+                <input type="text" id="customerAddress">
+            </div>
+            <div id="orderSummary"></div>
+            <button type="submit" class="btn-dark">Ordenar ahora</button>
+        </form>
+    </div>
+</div>
+
+<div id="successModal" class="modal">
+    <div class="modal-content">
+        <span class="close-success">&times;</span>
+        <div class="success-content">
+            <div class="success-icon">✅</div>
+            <h2>¡Gracias por tu compra!</h2>
+            <p>Hemos recibido tu pedido y lo procesaremos lo antes posible.</p>
+            <p>Recibirás un email de confirmación.</p>
+            <button class="btn-dark" id="closeSuccessBtn">Seguir comprando</button>
+        </div>
+    </div>
+</div>
+
+<script src="main.js"></script>
+</body>
+</html>

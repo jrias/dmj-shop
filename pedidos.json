@@ -1,0 +1,141 @@
+[
+  {
+    "id": 1780826828419,
+    "items": [
+      {
+        "id": 1,
+        "nombre": "Camiseta Básica",
+        "precio": 19.99,
+        "cantidad": 1
+      }
+    ],
+    "cliente": {
+      "nombre": "Test",
+      "email": "test@gmail.com",
+      "telefono": "123"
+    },
+    "total": 19.99,
+    "estado": "pendiente",
+    "fecha": "2026-06-07T10:07:08.419Z"
+  },
+  {
+    "id": 1781010245198,
+    "items": [
+      {
+        "id": 2,
+        "nombre": "Oura Ring Horizon - Schwarz",
+        "precio": 329,
+        "cantidad": 1
+      }
+    ],
+    "cliente": {
+      "nombre": "Test",
+      "email": "test@test.com",
+      "telefono": "123",
+      "direccion": ""
+    },
+    "total": 329,
+    "estado": "pendiente",
+    "fecha": "2026-06-09T13:04:05.198Z"
+  },
+  {
+    "id": 1781011064634,
+    "items": [
+      {
+        "id": 2,
+        "nombre": "Oura Ring Horizon - Schwarz",
+        "precio": 329,
+        "cantidad": 1
+      }
+    ],
+    "cliente": {
+      "nombre": "test",
+      "email": "test@test.com",
+      "telefono": "123",
+      "direccion": "\t"
+    },
+    "total": 329,
+    "estado": "pendiente",
+    "fecha": "2026-06-09T13:17:44.634Z"
+  },
+  {
+    "id": 1781011270547,
+    "items": [
+      {
+        "id": 2,
+        "nombre": "Oura Ring Horizon - Schwarz",
+        "precio": 329,
+        "cantidad": 1
+      }
+    ],
+    "cliente": {
+      "nombre": "test",
+      "email": "test@test.com",
+      "telefono": "123",
+      "direccion": "\t"
+    },
+    "total": 329,
+    "estado": "pendiente",
+    "fecha": "2026-06-09T13:21:10.547Z"
+  },
+  {
+    "id": 1781012003274,
+    "items": [
+      {
+        "id": 2,
+        "nombre": "Oura Ring Horizon - Schwarz",
+        "precio": 329,
+        "cantidad": 1
+      }
+    ],
+    "cliente": {
+      "nombre": "test",
+      "email": "test@test.com",
+      "telefono": "123",
+      "direccion": "\t"
+    },
+    "total": 329,
+    "estado": "pendiente",
+    "fecha": "2026-06-09T13:33:23.274Z"
+  },
+  {
+    "id": 1781012841953,
+    "items": [
+      {
+        "id": 1,
+        "nombre": "Oura Ring Horizon - Silber",
+        "precio": 329,
+        "cantidad": 1
+      }
+    ],
+    "cliente": {
+      "nombre": "test",
+      "email": "test@test.com",
+      "telefono": "123",
+      "direccion": "\t"
+    },
+    "total": 329,
+    "estado": "pendiente",
+    "fecha": "2026-06-09T13:47:21.953Z"
+  },
+  {
+    "id": 1781012905512,
+    "items": [
+      {
+        "id": 1,
+        "nombre": "Oura Ring Horizon - Silber",
+        "precio": 329,
+        "cantidad": 1
+      }
+    ],
+    "cliente": {
+      "nombre": "test",
+      "email": "test@test.com",
+      "telefono": "123",
+      "direccion": "\t"
+    },
+    "total": 329,
+    "estado": "pendiente",
+    "fecha": "2026-06-09T13:48:25.512Z"
+  }
+]

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>DMJ – Tu tienda</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="container">
+        <nav class="navbar">
+            <a href="#" class="logo">DMJ</a>
+            <ul class="nav-links">
+                 <li><a href="sobre.html">Sobre nosotros</a></li>
+                <!-- <li><a href="#">Ring</a></li>
+                <li><a href="#">Mitgliedschaft</a></li>
+                <li><a href="#">Entdecken</a></li> -->
+                <li><a href="contacto.html">Contacto</a></li>
+            </ul>
+            <div class="nav-buttons">
+                <!-- <button class="btn-outline" id="loginBtn">Anmelden</button> -->
+                <button class="cart-icon-btn" id="cartBtn">
+                    🛒 <span class="cart-badge" id="cartCount">0</span>
+                </button>
+            </div>
+        </nav>
+
+        <div class="shop-hero">
+            <h1>Colección</h1>
+            <p>Descubra los mejores productos con la mayor tecnologia de cuidados para la piel</p>
+        </div>
+
+        <div class="products-section">
+            <div class="products-grid" id="productsGrid"></div>
+        </div>
+
+        <div class="footer">
+            <p>© 2026 DMJ – Descubra el futuro del cuidado de la piel.</p>
+            <p>Todos los derechos reservados</p>
+        </div>
+    </div>
+
+    <div id="cartSidebar" class="cart-sidebar">
+        <div class="cart-sidebar-header">
+            <h2>Warenkorb</h2>
+            <button class="close-cart" id="closeCartBtn">&times;</button>
+        </div>
+        <div class="cart-sidebar-content" id="cartSidebarContent">
+            <div class="empty-cart">
+                <p>🛒 Su carrito de compras esta vacio</p>
+                <button class="btn-dark continue-shopping">Seguir comprando</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="cartOverlay" class="cart-overlay"></div>
+
+    <div id="checkoutModal" class="modal">
+        <div class="modal-content">
+            <span class="close-checkout">&times;</span>
+            <h2>Cerrar Orden</h2>
+            <form id="checkoutForm">
+                <div class="form-group">
+                    <label>Nombre *</label>
+                    <input type="text" id="customerName" required>
+                </div>
+                <div class="form-group">
+                    <label>Email *</label>
+                    <input type="email" id="customerEmail" required>
+                </div>
+                <div class="form-group">
+                    <label>Telefono</label>
+                    <input type="tel" id="customerPhone">
+                </div>
+                <div class="form-group">
+                    <label>Direccion *</label>
+                    <input type="text" id="customerAddress">
+                </div>
+                <div id="orderSummary"></div>
+                <button type="submit" class="btn-dark">Ordenar ahora</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <span class="close-success">&times;</span>
+            <div class="success-content">
+                <div class="success-icon">✅</div>
+                <h2>Muchas gracias por su compra!</h2>
+                <p>Hemos recibido su pedido y lo procesaremos lo antes posible.</p>
+                <p>Recibirá un correo electrónico de confirmación a la dirección de correo electrónico especificada.</p>
+                <button class="btn-dark" id="closeSuccessBtn">Weiter einkaufen</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+
+</html>
