@@ -1,11 +1,8 @@
 // PRODUCTOS
 const products = [
-    { id: 1, name: "RoyceDerm Face cream - Seborrheic Dermatitis", price: 329, image: "/medios/Imagenes/royce.jpeg", color: "Silber" },
-    { id: 2, name: "Sumvx Hair Serum - Cebolla y Romero", price: 329, image: "/medios/Imagenes/biotinrohs.jpeg", color: "Schwarz" },
-    { id: 3, name: "KL Ranko Cream - Moisturizing", price: 349, image: "/medios/Imagenes/rankomc.jpeg", color: "Gold" },
-   /*  { id: 4, name: "Oura Ring Heritage - Stealth", price: 399, image: "/medios/Imagenes/royce.jpg", color: "Stealth" },
-    { id: 5, name: "Oura Ring Gen3 - Roségold", price: 379, image: "/medios/Imagenes/model_hand.jpg", color: "Roségold" },
-    { id: 6, name: "Oura Lade-Station", price: 59, image: "/medios/Imagenes/ni.jpg", color: "Weiß" } */
+    { id: 1, name: "RoyceDerm Face cream", price: 329, image: "https://placehold.co/400x400/eeeeee/333333?text=RoyceDerm", color: "Silber" },
+    { id: 2, name: "Sumvx Hair Serum", price: 329, image: "https://placehold.co/400x400/eeeeee/333333?text=Sumvx", color: "Schwarz" },
+    { id: 3, name: "KL Ranko Cream", price: 349, image: "https://placehold.co/400x400/eeeeee/333333?text=KL+Ranko", color: "Gold" },
 ];
 
 let cart = [];
