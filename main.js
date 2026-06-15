@@ -1,10 +1,9 @@
 // PRODUCTOS
 const products = [
-    { id: 1, name: "RoyceDerm Face cream", price: 329, image: "https://placehold.co/400x400/eeeeee/333333?text=RoyceDerm", color: "Silber" },
-    { id: 2, name: "Sumvx Hair Serum", price: 329, image: "https://placehold.co/400x400/eeeeee/333333?text=Sumvx", color: "Schwarz" },
-    { id: 3, name: "KL Ranko Cream", price: 349, image: "https://placehold.co/400x400/eeeeee/333333?text=KL+Ranko", color: "Gold" },
+    { id: 1, name: "RoyceDerm Face cream", price: 329, image: "/medios/Imagenes/royce.jpeg", color: "Silber" },
+    { id: 2, name: "Sumvx Hair Serum", price: 329, image: "/medios/Imagenes/biotinrohs.jpeg", color: "Schwarz" },
+    { id: 3, name: "KL Ranko Cream", price: 349, image: "/medios/Imagenes/rankomc.jpeg", color: "Gold" },
 ];
-
 let cart = [];
 
 function renderProducts() {
