@@ -3,6 +3,7 @@ const nodemailer = require('nodemailer');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
+const brevo = require('@getbrevo/brevo');
 require('dotenv').config();
 
 const app = express();
@@ -17,12 +18,9 @@ app.use('/medios', express.static(path.join(__dirname, 'medios')));
 
 // Productos
 const productos = [
-    { id: 1, nombre: "Oura Ring Horizon - Silber", precio: 329, imagen: "/medios/Imagenes/model_hand.jpg", color: "Silber" },
-    { id: 2, nombre: "Oura Ring Horizon - Schwarz", precio: 329, imagen: "/medios/Imagenes/ni.jpg", color: "Schwarz" },
-    { id: 3, nombre: "Oura Ring Heritage - Gold", precio: 349, imagen: "/medios/Imagenes/Sk.jpg", color: "Gold" },
-    { id: 4, nombre: "Oura Ring Heritage - Stealth", precio: 399, imagen: "/medios/Imagenes/royce.jpg", color: "Stealth" },
-    { id: 5, nombre: "Oura Ring Gen3 - Roségold", precio: 379, imagen: "/medios/Imagenes/model_hand.jpg", color: "Roségold" },
-    { id: 6, nombre: "Oura Lade-Station", precio: 59, imagen: "/medios/Imagenes/ni.jpg", color: "Weiß" }
+    { id: 1, nombre: "RoyceDerm Face cream", precio: 329, imagen: "/medios/Imagenes/royce.jpeg", color: "Silber" },
+    { id: 2, nombre: "Sumvx Hair Serum", precio: 329, imagen: "/medios/Imagenes/biotinrohs.jpeg", color: "Schwarz" },
+    { id: 3, nombre: "KL Ranko Cream", precio: 349, imagen: "/medios/Imagenes/rankomc.jpeg", color: "Gold" },
 ];
 
 // Endpoint: Listar productos
@@ -44,7 +42,7 @@ function guardarPedidoLocal(pedido) {
     fs.writeFileSync(pedidosFile, JSON.stringify(pedidos, null, 2));
     console.log(`\n📦 NUEVO PEDIDO #${pedido.id}`);
     console.log(`   Cliente: ${pedido.cliente.nombre} (${pedido.cliente.email})`);
-    console.log(`   Total: €${pedido.total.toFixed(2)}`);
+    console.log(`   Total: $${pedido.total.toFixed(2)} MXN`);
     console.log(`   Guardado en: pedidos.json\n`);
 }
 
@@ -74,42 +72,49 @@ app.post('/api/pedidos', async (req, res) => {
         // Guardar localmente
         guardarPedidoLocal(pedido);
 
-        // Intentar enviar email (opcional)
-        if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS) {
-            try {
-                const transporter = nodemailer.createTransport({
-                    host: process.env.SMTP_HOST,
-                    port: parseInt(process.env.SMTP_PORT) || 587,
-                    secure: process.env.SMTP_SECURE === 'true',
-                    auth: {
-                        user: process.env.SMTP_USER,
-                        pass: process.env.SMTP_PASS
-                    }
-                });
+        // Configuración de Brevo para emails
+        try {
+            let apiInstance = new brevo.TransactionalEmailsApi();
+            let apiKey = apiInstance.authentications['apiKey'];
+            apiKey.apiKey = process.env.BREVO_API_KEY;
 
-                const adminHtml = `
-                    <h2>Neue Bestellung #${pedido.id}</h2>
-                    <p><strong>Kunde:</strong> ${pedido.cliente.nombre}</p>
-                    <p><strong>Email:</strong> ${pedido.cliente.email}</p>
-                    <p><strong>Telefon:</strong> ${pedido.cliente.telefono || '-'}</p>
-                    <h3>Produkte:</h3>
-                    <ul>
-                        ${items.map(item => `<li>${item.nombre} x${item.cantidad} = €${(item.precio * item.cantidad).toFixed(2)}</li>`).join('')}
-                    </ul>
-                    <h3>Total: €${pedido.total.toFixed(2)}</h3>
-                `;
+            // Email para el admin
+            let adminEmail = new brevo.SendSmtpEmail();
+            adminEmail.subject = `🛍️ Nuevo pedido #${pedido.id}`;
+            adminEmail.sender = { name: "DMJ Shop", email: "djmmar9@gmail.com" };
+            adminEmail.to = [{ email: "djmmar9@gmail.com" }];
+            adminEmail.htmlContent = `
+                <h2>¡Nuevo pedido!</h2>
+                <p><strong>Cliente:</strong> ${pedido.cliente.nombre}</p>
+                <p><strong>Email:</strong> ${pedido.cliente.email}</p>
+                <p><strong>Teléfono:</strong> ${pedido.cliente.telefono || 'N/A'}</p>
+                <p><strong>Dirección:</strong> ${pedido.cliente.direccion || 'N/A'}</p>
+                <h3>Productos:</h3>
+                <ul>${items.map(item => `<li>${item.nombre} x${item.cantidad} = $${(item.precio * item.cantidad).toFixed(2)} MXN</li>`).join('')}</ul>
+                <h3>Total: $${pedido.total.toFixed(2)} MXN</h3>
+            `;
+            await apiInstance.sendTransacEmail(adminEmail);
+            console.log('✅ Email al admin enviado');
 
-                await transporter.sendMail({
-                    from: `"Oura Shop" <${process.env.SMTP_USER}>`,
-                    to: process.env.ADMIN_EMAIL || process.env.SMTP_USER,
-                    subject: `Neue Bestellung #${pedido.id}`,
-                    html: adminHtml
-                });
+            // Email para el cliente
+            let customerEmail = new brevo.SendSmtpEmail();
+            customerEmail.subject = `✅ Pedido #${pedido.id} recibido - DMJ Shop`;
+            customerEmail.sender = { name: "DMJ Shop", email: "djmmar9@gmail.com" };
+            customerEmail.to = [{ email: pedido.cliente.email }];
+            customerEmail.htmlContent = `
+                <h2>¡Gracias ${pedido.cliente.nombre}!</h2>
+                <p>Hemos recibido tu pedido #${pedido.id} y lo procesaremos pronto.</p>
+                <h3>Resumen de tu compra:</h3>
+                <ul>${items.map(item => `<li>${item.nombre} x${item.cantidad} = $${(item.precio * item.cantidad).toFixed(2)} MXN</li>`).join('')}</ul>
+                <p><strong>Total: $${pedido.total.toFixed(2)} MXN</strong></p>
+                <p>¡Gracias por confiar en DMJ Shop!</p>
+            `;
+            await apiInstance.sendTransacEmail(customerEmail);
+            console.log('✅ Email al cliente enviado');
 
-                console.log('✅ Email enviado al admin');
-            } catch (emailError) {
-                console.log('⚠️ Email no enviado:', emailError.message);
-            }
+        } catch (brevoError) {
+            console.log('❌ Error con Brevo:', brevoError.message);
+            console.log('   El pedido se guardó pero no se envió el email.');
         }
 
         res.json({ 
