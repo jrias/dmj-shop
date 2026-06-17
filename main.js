@@ -254,7 +254,7 @@ function renderProductPacks(productId) {
 // RENDER VIDEO INFORMATIVO DEL PRODUCTO
 // ============================================
 function renderProductVideo(productId) {
-    // Ruta exacta que funciona en el navegador
+    // Ruta CORRECTA que funciona en el navegador
     const videos = {
         1: "/Medios/videos/royceVideo.mp4",
         2: "/Medios/videos/biotinVideo.mp4",
