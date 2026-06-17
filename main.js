@@ -255,18 +255,11 @@ function renderProductPacks(productId) {
 // ============================================
 
 function renderProductVideo(productId) {
-    // Mapeo de videos por producto - CARPETA "videos" en minúscula
-    const videos = {
-        1: "/Medios/videos/royceVideo.mp4",
-        2: "/Medios/videos/biotinVideo.mp4",
-        3: "/Medios/videos/rankoVideo.mp4"
-    };
-
-    const videoSrc = videos[productId] || "";
-    if (!videoSrc) return;
-
     const videoContainer = document.getElementById('productVideoContainer');
     if (!videoContainer) return;
+
+    // Video de prueba de internet
+    const videoSrc = "https://www.w3schools.com/html/mov_bbb.mp4";
 
     videoContainer.innerHTML = `
         <div class="product-video-wrapper">
@@ -280,7 +273,7 @@ function renderProductVideo(productId) {
                 class="product-video"
             ></video>
             <div class="video-overlay">
-                <span class="video-badge">🎬 Información del producto</span>
+                <span class="video-badge">🎬 Video de prueba</span>
             </div>
         </div>
     `;
