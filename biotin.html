@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>MCD – Biotin Hair Serum</title>
+    <link rel="stylesheet" href="Style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="container">
+        <nav class="navbar">
+            <a href="index.html" class="logo">MCD</a>
+            <ul class="nav-links">
+                <li><a href="sobre.html">Sobre nosotros</a></li>
+                <li><a href="index.html">Productos</a></li>
+                <li><a href="contacto.html">Contacto</a></li>
+            </ul>
+            <div class="nav-buttons">
+                <button class="cart-icon-btn" id="cartBtn">
+                    🛒 <span class="cart-badge" id="cartCount">0</span>
+                </button>
+            </div>
+        </nav>
+
+        <!-- PRODUCTO DESTACADO -->
+        <div class="product-detail-section">
+            <div class="product-detail-grid">
+                <div class="product-detail-image">
+                    <img src="" alt="Biotin Hair Serum">
+                </div>
+                <div class="product-detail-info">
+                    <h1>Biotin Hair Serum</h1>
+                    <p class="product-detail-description">Es un sérum capilar diseñado para nutrir, fortalecer y revitalizar el cabello desde la raíz.</p>
+                    <div class="product-detail-price">
+                        <span class="price-original">$102.857</span>
+                        <span class="price-current">$72.000</span>
+                    </div>
+                    <button class="btn-dark btn-add-to-cart">Agregar al carrito</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECCIÓN DE PACKS + VIDEO LADO A LADO -->
+        <div class="packs-section">
+            <h2>Elige tu pack</h2>
+            <p class="packs-subtitle">Encuentra la mejor opción para ti</p>
+
+            <div class="packs-video-grid">
+                <!-- Packs a la izquierda -->
+                <div class="packs-grid" id="packsGridBiotin"></div>
+
+                <!-- Video a la derecha -->
+                <div class="video-container" id="productVideoContainer">
+                    <!-- El video se renderiza desde JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        
+
+        <div class="footer">
+            <p>© 2026 MCD – Descubra el futuro del cuidado de la piel.</p>
+            <p>Todos los derechos reservados</p>
+        </div>
+    </div>
+
+    <!-- CART SIDEBAR, MODALES (igual que ranko.html) -->
+    <!-- ... incluir todo el código de sidebar y modales igual que en ranko.html ... -->
+
+    <script src="main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCart();
+            renderProductDetail(2);
+
+            const cartBtn = document.getElementById('cartBtn');
+            if (cartBtn) cartBtn.onclick = openCart;
+
+            const closeCartBtn = document.getElementById('closeCartBtn');
+            if (closeCartBtn) closeCartBtn.onclick = closeCart;
+
+            const cartOverlay = document.getElementById('cartOverlay');
+            if (cartOverlay) cartOverlay.onclick = closeCart;
+
+            document.querySelectorAll('.close-checkout, .close-success').forEach(btn => {
+                btn.onclick = closeModals;
+            });
+
+            const checkoutForm = document.getElementById('checkoutForm');
+            if (checkoutForm) checkoutForm.onsubmit = submitOrder;
+
+            const closeSuccessBtn = document.getElementById('closeSuccessBtn');
+            if (closeSuccessBtn) {
+                closeSuccessBtn.onclick = () => {
+                    document.getElementById('successModal').style.display = 'none';
+                };
+            }
+
+            window.onclick = (e) => {
+                if (e.target.classList.contains('modal')) closeModals();
+                if (e.target.classList.contains('cart-modal')) closeCartModal();
+            };
+
+            const closeModalBtn = document.getElementById('closeCartModal');
+            if (closeModalBtn) {
+                closeModalBtn.addEventListener('click', closeCartModal);
+            }
+
+            const modalForm = document.getElementById('modalCheckoutForm');
+            if (modalForm) {
+                modalForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+
+                    const phone = document.getElementById('modalPhone').value;
+                    const name = document.getElementById('modalName').value;
+                    const email = document.getElementById('modalEmail').value;
+                    const address = document.getElementById('modalAddress').value;
+                    const city = document.getElementById('modalCity').value;
+                    const neighborhood = document.getElementById('modalNeighborhood').value;
+
+                    if (!phone || !name || !email || !address || !city || !neighborhood) {
+                        showToast('Por favor completa todos los campos');
+                        return;
+                    }
+
+                    await submitOrderModal(phone, name, email, address, city, neighborhood);
+                });
+            }
+        });
+    </script>
+
+</body>
+</html>

@@ -18,7 +18,7 @@ app.use('/medios', express.static(path.join(__dirname, 'medios')));
 
 // Productos
 const productos = [
-    { id: 1, nombre: "RoyceDerm Face cream", precio: 329, imagen: "/medios/Imagenes/royce.jpeg", color: "Silber" },
+    { id: 1, nombre: "RoyceDerm Face cream", precio: 78.000 + "Envio Gratis", imagen: "/medios/Imagenes/royce.jpeg", color: "Silber" },
     { id: 2, nombre: "Sumvx Hair Serum", precio: 329, imagen: "/medios/Imagenes/biotinrohs.jpeg", color: "Schwarz" },
     { id: 3, nombre: "KL Ranko Cream", precio: 349, imagen: "/medios/Imagenes/rankomc.jpeg", color: "Gold" },
 ];
