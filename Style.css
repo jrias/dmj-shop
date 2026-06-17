@@ -1584,25 +1584,7 @@ body {
     background: linear-gradient(135deg, #00A381, #00B8B9);
 }
 
-/* ============================================
-   17. OCULTAR SCROLLBAR EN TODA LA PÁGINA
-   ============================================ */
 
-/* Ocultar scrollbar en toda la página */
-::-webkit-scrollbar {
-    width: 0px;
-    background: transparent;
-}
-
-/* Para Firefox */
-* {
-    scrollbar-width: none;
-}
-
-/* Para Internet Explorer y Edge */
-* {
-    -ms-overflow-style: none;
-}
 
 /* ============================================
    18. OCULTAR SCROLLBAR EN EL CARRITO MODAL
