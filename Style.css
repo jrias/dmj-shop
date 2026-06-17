@@ -2,54 +2,20 @@
    1. RESET Y VARIABLES GLOBALES
    ============================================ */
 
-/* ============================================
-   ELIMINAR CURSOR DE TEXTO
-   ============================================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-/* Todos los elementos sin cursor de texto */
 *:not(input):not(textarea):not([contenteditable="true"]) {
     cursor: default;
 }
 
-/* Inputs y textareas con cursor de texto */
-input, textarea, [contenteditable="true"] {
+input,
+textarea,
+[contenteditable="true"] {
     cursor: text;
-}
-
-/* Elementos clickeables con cursor pointer */
-button,
-.btn-dark,
-.btn-outline,
-.cart-icon-btn,
-.product-card,
-.pack-option,
-.pack-family,
-.nav-links a,
-.logo,
-.close-cart,
-.close-cart-modal,
-.close-checkout,
-.close-success,
-.remove-item,
-.cart-item-quantity button,
-.modal-submit-btn,
-.pack-card-footer button,
-.add-to-cart-btn,
-.continue-shopping,
-.back-link,
-.shipping-option {
-    cursor: pointer;
-}
-
-/* Deshabilitar selección de texto */
-* {
-    -webkit-user-select: none;
-    user-select: none;
-}
-
-input, textarea, [contenteditable="true"] {
-    -webkit-user-select: text;
-    user-select: text;
 }
 
 body {
@@ -63,6 +29,19 @@ body {
     max-width: 1280px;
     margin: 0 auto;
     padding: 0 24px;
+}
+
+/* Deshabilitar selección de texto */
+* {
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+input,
+textarea,
+[contenteditable="true"] {
+    -webkit-user-select: text;
+    user-select: text;
 }
 
 /* ============================================
@@ -108,7 +87,6 @@ body {
     padding-bottom: 4px;
 }
 
-/* Efecto hover para enlaces de navegación - Subrayado elegante */
 .nav-links a::after {
     content: '';
     position: absolute;
@@ -276,44 +254,29 @@ body {
 
 .product-info {
     padding: 20px;
-    text-align: left;
+    text-align: center;
 }
 
 .product-info h3 {
     font-size: 1.1rem;
     font-weight: 600;
-    margin-bottom: 6px;
+    margin-bottom: 4px;
 }
 
-.product-color {
-    color: #999;
+.product-card::after {
+    content: "→ Ver más";
+    display: block;
+    text-align: center;
     font-size: 0.8rem;
-    margin-bottom: 12px;
+    color: #999;
+    padding: 8px 0;
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
-.product-price {
-    font-size: 1.3rem;
-    font-weight: 700;
-    margin-bottom: 16px;
-}
-
-.product-info button {
-    width: 100%;
-    padding: 12px;
-    background: linear-gradient(135deg, #6C5CE7, #A29BFE, #FD79A8);
-    color: white;
-    border: none;
-    border-radius: 40px;
-    cursor: pointer;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
-}
-
-.product-info button:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(108, 92, 231, 0.5);
-    background: linear-gradient(135deg, #5A4BD1, #8E87F0, #F56A9A);
+.product-card:hover::after {
+    opacity: 1;
+    color: #00B894;
 }
 
 /* ============================================
@@ -479,14 +442,6 @@ body {
     padding: 20px 24px;
     border-top: 1px solid #f0f0f0;
     background: white;
-}
-
-.cart-total {
-    display: flex;
-    justify-content: space-between;
-    font-size: 1.2rem;
-    font-weight: 700;
-    margin-bottom: 20px;
 }
 
 .cart-sidebar-footer button {
@@ -776,10 +731,6 @@ body {
     color: #666;
 }
 
-/* ============================================
-   14. ENLACE VOLVER (BACK LINK)
-   ============================================ */
-
 .back-link {
     display: inline-block;
     margin-top: 30px;
@@ -802,7 +753,7 @@ body {
 }
 
 /* ============================================
-   15. PÁGINA DE CONTACTO
+   14. PÁGINA DE CONTACTO
    ============================================ */
 
 .contact-section {
@@ -822,7 +773,6 @@ body {
     letter-spacing: -0.02em;
 }
 
-/* Texto informativo ordenado */
 .contact-info {
     text-align: center;
     margin-bottom: 50px;
@@ -858,7 +808,6 @@ body {
     border-top: 1px solid #e0e0e0;
 }
 
-/* Contenedor del formulario con imagen de fondo */
 .contact-form-container {
     background-image: url('/medios/Imagenes/contact-bg.jpg');
     background-size: cover;
@@ -869,7 +818,6 @@ body {
     margin: 30px 0;
 }
 
-/* Formulario */
 .contact-form {
     background: rgba(255, 255, 255, 0.92);
     padding: 40px;
@@ -942,13 +890,11 @@ body {
     background: linear-gradient(135deg, #00A381, #00B8B9, #00C0C1);
 }
 
-/* Enlace volver */
 .contact-back-link {
     text-align: center;
     margin-top: 40px;
 }
 
-/* Mensaje de éxito del formulario de contacto */
 .contact-success {
     text-align: center;
     padding: 40px;
@@ -971,7 +917,7 @@ body {
 }
 
 /* ============================================
-   16. CART MODAL EMERGENTE - MEJORADO
+   15. CART MODAL EMERGENTE
    ============================================ */
 
 .cart-modal {
@@ -1059,7 +1005,6 @@ body {
     text-align: center;
 }
 
-/* Items del carrito en el modal - VERSIÓN MEJORADA */
 .cart-modal-item {
     display: flex;
     justify-content: space-between;
@@ -1110,7 +1055,6 @@ body {
     font-size: 0.9rem;
 }
 
-/* Controles de cantidad en el modal - más grandes */
 .cart-modal-item-quantity {
     display: flex;
     align-items: center;
@@ -1157,7 +1101,6 @@ body {
     transform: scale(1.1);
 }
 
-/* Precio original tachado y precio con descuento */
 .cart-modal-item-price-wrapper {
     display: flex;
     flex-direction: column;
@@ -1184,7 +1127,6 @@ body {
     text-align: right;
 }
 
-/* Etiqueta de descuento en el nombre del producto */
 .cart-modal-item-discount-badge {
     background: #ff4444;
     color: white;
@@ -1208,269 +1150,6 @@ body {
         background: #ff2222;
     }
 }
-
-/* ============================================
-   SECCIÓN DE PACKS CON AHORROS
-   ============================================ */
-
-.packs-section {
-    padding: 60px 20px;
-    background: #fafaf8;
-    border-radius: 32px;
-    margin: 40px 0;
-}
-
-
-
-.packs-section h2 {
-    font-size: 2rem;
-    font-weight: 700;
-    text-align: center;
-    margin-bottom: 8px;
-    letter-spacing: -0.02em;
-}
-
-.packs-subtitle {
-    text-align: center;
-    color: #666;
-    margin-bottom: 48px;
-    font-size: 1.1rem;
-    font-weight: 500;
-}
-
-.packs-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-    gap: 30px;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.pack-card {
-    background: white;
-    border-radius: 24px;
-    overflow: hidden;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-    border: 1px solid #f0f0f0;
-    transition: all 0.3s ease;
-}
-
-.pack-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
-}
-
-/* PACK CARD HEADER CON IMAGEN DE FONDO */
-.pack-card-header {
-    position: relative;
-    min-height: 140px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    border-bottom: 1px solid #f0f0f0;
-    overflow: hidden;
-}
-
-.pack-card-header-overlay {
-    background: rgba(0, 0, 0, 0.5);
-    padding: 24px 24px 16px;
-    width: 100%;
-    min-height: 140px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.pack-card-header h3 {
-    font-size: 1.8rem;
-    font-weight: 700;
-    margin-bottom: 2px;
-    color: white;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-}
-
-.pack-card-header .pack-subtitle {
-    color: rgba(255, 255, 255, 0.9);
-    font-size: 1rem;
-    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
-}
-
-.pack-options {
-    padding: 20px 24px;
-}
-
-.pack-option {
-    padding: 14px 0;
-    border-bottom: 1px solid #f5f5f5;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    border-radius: 8px;
-    padding: 12px 14px;
-}
-
-.pack-option:hover {
-    background: #f8f8f8;
-}
-
-.pack-option:last-child {
-    border-bottom: none;
-}
-
-.pack-option .pack-name-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.pack-option .pack-name {
-    font-weight: 700;
-    font-size: 1rem;
-    color: #000;
-}
-
-.pack-option .pack-units {
-    color: #666;
-    font-size: 0.8rem;
-    font-weight: 400;
-}
-
-.pack-option .pack-price-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-top: 4px;
-    gap: 12px;
-    flex-wrap: wrap;
-}
-
-.pack-option .pack-price {
-    font-weight: 700;
-    font-size: 1.2rem;
-    color: #00B894;
-    flex-shrink: 0;
-}
-
-.pack-option .pack-description {
-    font-size: 0.8rem;
-    color: #666;
-    margin-top: 0;
-    text-align: right;
-    flex: 1;
-    line-height: 1.4;
-}
-
-/* AHORROS */
-.pack-savings {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 6px;
-    padding: 6px 12px;
-    background: #f0f9f0;
-    border-radius: 8px;
-}
-
-.pack-savings .savings-label {
-    font-size: 0.7rem;
-    font-weight: 700;
-    color: #00B894;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.pack-savings .savings-amount {
-    font-weight: 700;
-    font-size: 0.9rem;
-    color: #ff4444;
-}
-
-.pack-savings .savings-percent {
-    font-weight: 700;
-    font-size: 0.8rem;
-    color: #ff4444;
-    background: #ffebeb;
-    padding: 2px 10px;
-    border-radius: 12px;
-}
-
-.pack-family {
-    background: linear-gradient(135deg, #fff5f5, #fff0f0);
-    border: 2px solid #ff4444;
-    border-radius: 12px;
-    padding: 16px 18px;
-    margin-top: 12px;
-    text-align: center;
-}
-
-.pack-family .family-name {
-    font-weight: 700;
-    font-size: 1.1rem;
-    color: #ff4444;
-}
-
-.pack-family .family-price {
-    font-weight: 700;
-    font-size: 1.4rem;
-    color: #000;
-    margin: 4px 0;
-}
-
-.pack-family .family-desc {
-    font-size: 0.85rem;
-    color: #666;
-}
-
-.pack-family .family-savings {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin-top: 8px;
-}
-
-.pack-family .family-savings span {
-    font-size: 0.8rem;
-    font-weight: 600;
-}
-
-.pack-family .family-savings .savings-amount {
-    color: #ff4444;
-}
-
-.pack-family .family-savings .savings-percent {
-    color: #ff4444;
-    background: #ffebeb;
-    padding: 2px 12px;
-    border-radius: 12px;
-}
-
-.pack-card-footer {
-    padding: 16px 24px 20px;
-    border-top: 1px solid #f0f0f0;
-}
-
-.pack-card-footer button {
-    width: 100%;
-    padding: 14px;
-    background: linear-gradient(135deg, #00B894, #00CEC9);
-    color: white;
-    border: none;
-    border-radius: 40px;
-    font-weight: 600;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.pack-card-footer button:hover {
-    transform: scale(1.02);
-    box-shadow: 0 4px 15px rgba(0, 206, 201, 0.4);
-}
-
-/* ============================================
-   RESUMEN DE PRECIOS - ESTILO EXACTO
-   ============================================ */
 
 .cart-modal-summary {
     background: #f8f8f8;
@@ -1499,19 +1178,16 @@ body {
     color: #333;
 }
 
-/* Fila de descuento - valor en rojo */
 .summary-row.discount .summary-value {
     color: #ff4444;
     font-weight: 600;
 }
 
-/* Fila de envío - valor en verde */
 .summary-row.shipping .summary-value {
     color: #00B894;
     font-weight: 600;
 }
 
-/* Fila de total - más grande y en negrita */
 .summary-row.total {
     border-top: 2px solid #e0e0e0;
     margin-top: 8px;
@@ -1530,7 +1206,6 @@ body {
     font-size: 1.2rem;
 }
 
-/* Opciones de envío */
 .shipping-options {
     margin: 16px 0 20px;
 }
@@ -1562,7 +1237,6 @@ body {
     font-size: 0.9rem;
 }
 
-/* Botón confirmar - MEJORADO */
 .modal-submit-btn {
     width: 100%;
     padding: 16px;
@@ -1584,92 +1258,10 @@ body {
     background: linear-gradient(135deg, #00A381, #00B8B9);
 }
 
-
-
 /* ============================================
-   18. OCULTAR SCROLLBAR EN EL CARRITO MODAL
+   16. SCROLLBARS VISIBLES
    ============================================ */
 
-/* ============================================
-   SCROLLBARS VISIBLES EN CARRITO Y MODALES
-   ============================================ */
-
-/* Scrollbar visible en el carrito modal */
-.cart-modal-content::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-}
-
-.cart-modal-content::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 10px;
-}
-
-.cart-modal-content::-webkit-scrollbar-thumb {
-    background: #ccc;
-    border-radius: 10px;
-}
-
-.cart-modal-content::-webkit-scrollbar-thumb:hover {
-    background: #999;
-}
-
-.cart-modal-content {
-    scrollbar-width: thin;
-    scrollbar-color: #ccc #f1f1f1;
-}
-
-/* Scrollbar visible en el sidebar del carrito */
-.cart-sidebar-content::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-}
-
-.cart-sidebar-content::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 10px;
-}
-
-.cart-sidebar-content::-webkit-scrollbar-thumb {
-    background: #ccc;
-    border-radius: 10px;
-}
-
-.cart-sidebar-content::-webkit-scrollbar-thumb:hover {
-    background: #999;
-}
-
-.cart-sidebar-content {
-    scrollbar-width: thin;
-    scrollbar-color: #ccc #f1f1f1;
-}
-
-/* Scrollbar visible en otros modales */
-.modal-content::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-}
-
-.modal-content::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 10px;
-}
-
-.modal-content::-webkit-scrollbar-thumb {
-    background: #ccc;
-    border-radius: 10px;
-}
-
-.modal-content::-webkit-scrollbar-thumb:hover {
-    background: #999;
-}
-
-.modal-content {
-    scrollbar-width: thin;
-    scrollbar-color: #ccc #f1f1f1;
-}
-
-/* Scrollbar global para toda la página */
 html {
     overflow-y: scroll;
 }
@@ -1693,14 +1285,47 @@ html {
     background: #999;
 }
 
-/* Para Firefox */
 * {
     scrollbar-width: thin;
     scrollbar-color: #ccc #f1f1f1;
 }
 
+.cart-modal-content::-webkit-scrollbar,
+.cart-sidebar-content::-webkit-scrollbar,
+.modal-content::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+.cart-modal-content::-webkit-scrollbar-track,
+.cart-sidebar-content::-webkit-scrollbar-track,
+.modal-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.cart-modal-content::-webkit-scrollbar-thumb,
+.cart-sidebar-content::-webkit-scrollbar-thumb,
+.modal-content::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
+}
+
+.cart-modal-content::-webkit-scrollbar-thumb:hover,
+.cart-sidebar-content::-webkit-scrollbar-thumb:hover,
+.modal-content::-webkit-scrollbar-thumb:hover {
+    background: #999;
+}
+
+.cart-modal-content,
+.cart-sidebar-content,
+.modal-content {
+    scrollbar-width: thin;
+    scrollbar-color: #ccc #f1f1f1;
+}
+
 /* ============================================
-   CART SIDEBAR - RESUMEN DE PRECIOS
+   17. CART SIDEBAR - RESUMEN DE PRECIOS
    ============================================ */
 
 .cart-sidebar-summary {
@@ -1759,8 +1384,194 @@ html {
 }
 
 /* ============================================
-   ENVÍO GRATIS BADGE
+   18. SECCIÓN DE PACKS CON AHORROS
    ============================================ */
+
+.packs-section {
+    padding: 60px 20px;
+    background: #fafaf8;
+    border-radius: 32px;
+    margin: 40px 0;
+}
+
+.packs-section h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 8px;
+    letter-spacing: -0.02em;
+}
+
+.packs-subtitle {
+    text-align: center;
+    color: #666;
+    margin-bottom: 48px;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.packs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.pack-card {
+    background: white;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    border: 1px solid #f0f0f0;
+    transition: all 0.3s ease;
+}
+
+.pack-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+}
+
+.pack-card-header {
+    position: relative;
+    min-height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border-bottom: 1px solid #f0f0f0;
+    overflow: hidden;
+}
+
+.pack-card-header-overlay {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 24px 24px 16px;
+    width: 100%;
+    min-height: 140px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.pack-card-header h3 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 2px;
+    color: white;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.pack-card-header .pack-subtitle {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1rem;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+.pack-options {
+    padding: 20px 24px;
+}
+
+.pack-option {
+    padding: 12px 14px;
+    border-bottom: 1px solid #f5f5f5;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    border: 2px solid transparent;
+    position: relative;
+}
+
+.pack-option:hover {
+    background: #f0f7ff;
+    transform: translateX(6px);
+    border-color: #4A9EC7;
+    box-shadow: 0 4px 15px rgba(74, 158, 199, 0.15);
+}
+
+.pack-option:active {
+    transform: scale(0.98);
+}
+
+.pack-option:last-child {
+    border-bottom: none;
+}
+
+.pack-option .pack-name-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.pack-option .pack-name {
+    font-weight: 700;
+    font-size: 1rem;
+    color: #000;
+}
+
+.pack-option .pack-units {
+    color: #666;
+    font-size: 0.8rem;
+    font-weight: 400;
+}
+
+.pack-option .pack-price-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-top: 4px;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.pack-option .pack-price {
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: #00B894;
+    flex-shrink: 0;
+}
+
+.pack-option .pack-description {
+    font-size: 0.8rem;
+    color: #666;
+    margin-top: 0;
+    text-align: right;
+    flex: 1;
+    line-height: 1.4;
+}
+
+.pack-savings {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 6px;
+    padding: 6px 12px;
+    background: #f0f9f0;
+    border-radius: 8px;
+}
+
+.pack-savings .savings-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #00B894;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.pack-savings .savings-amount {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #ff4444;
+}
+
+.pack-savings .savings-percent {
+    font-weight: 700;
+    font-size: 0.8rem;
+    color: #ff4444;
+    background: #ffebeb;
+    padding: 2px 10px;
+    border-radius: 12px;
+}
 
 .pack-shipping-badge {
     display: inline-block;
@@ -1771,6 +1582,228 @@ html {
     padding: 3px 12px;
     border-radius: 20px;
     margin-top: 4px;
+}
+
+.pack-card-footer {
+    padding: 16px 24px 20px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.pack-card-footer button {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #00B894, #00CEC9);
+    color: white;
+    border: none;
+    border-radius: 40px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.pack-card-footer button:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 15px rgba(0, 206, 201, 0.4);
+}
+
+/* ============================================
+   19. PACK FAMILIAR - EFECTO PREMIUM
+   ============================================ */
+
+.pack-family {
+    background: linear-gradient(135deg, #fafafa, #f5f5f5);
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin-top: 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    overflow: visible;
+    /* ✅ Cambiado de hidden a visible */
+}
+
+.pack-family .family-name {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #333;
+    transition: color 0.4s ease;
+}
+
+.pack-family .family-price {
+    font-weight: 700;
+    font-size: 1.4rem;
+    color: #333;
+    margin: 4px 0;
+    transition: color 0.4s ease;
+}
+
+.pack-family .family-desc {
+    font-size: 0.85rem;
+    color: #888;
+    transition: color 0.4s ease;
+}
+
+.pack-family .family-savings .savings-amount {
+    color: #888;
+    transition: color 0.4s ease;
+}
+
+.pack-family .family-savings .savings-percent {
+    color: #888;
+    background: #f0f0f0;
+    padding: 2px 12px;
+    border-radius: 12px;
+    transition: all 0.4s ease;
+}
+
+.pack-family:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+    border-color: #FFD700;
+    background: linear-gradient(135deg, #fffef5, #fff8e7);
+}
+
+.pack-family:hover .family-name {
+    color: #FFD700;
+}
+
+.pack-family:hover .family-price {
+    color: #000;
+}
+
+.pack-family:hover .family-desc {
+    color: #555;
+}
+
+.pack-family:hover .family-savings .savings-amount {
+    color: #ff4444;
+}
+
+.pack-family:hover .family-savings .savings-percent {
+    color: #ff4444;
+    background: #ffebeb;
+}
+
+.pack-family::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 215, 0, 0.1) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.6s ease;
+    pointer-events: none;
+}
+
+.pack-family:hover::before {
+    opacity: 1;
+}
+
+.pack-family .family-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    color: white;
+    font-size: 0.55rem;
+    font-weight: 700;
+    padding: 2px 12px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+    box-shadow: 0 2px 10px rgba(255, 215, 0, 0.3);
+    animation: badgePulse 2s ease-in-out infinite;
+}
+
+@keyframes badgePulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+/* Etiqueta "BEST SELLER" - AJUSTADA */
+.pack-family .family-tag {
+    position: absolute;
+    top: -10px;
+    right: -5px;
+    background: linear-gradient(135deg, #FF6B6B, #FF4444);
+    color: white;
+    font-size: 0.55rem;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 10px rgba(255, 68, 68, 0.3);
+    opacity: 0;
+    transform: scale(0.8) rotate(-3deg);
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    white-space: nowrap;
+    z-index: 10;
+}
+
+.pack-family:hover .family-tag {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+}
+
+/* Badge "MEJOR OPCIÓN" - AJUSTADO */
+.pack-family .family-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    color: white;
+    font-size: 0.6rem;
+    font-weight: 700;
+    padding: 3px 14px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+    box-shadow: 0 2px 10px rgba(255, 215, 0, 0.3);
+    animation: badgePulse 2s ease-in-out infinite;
+}
+
+.pack-family .family-click-hint {
+    display: block;
+    font-size: 0.65rem;
+    color: #ccc;
+    margin-top: 6px;
+    transition: all 0.4s ease;
+}
+
+.pack-family:hover .family-click-hint {
+    color: #FFD700;
+    letter-spacing: 1px;
+}
+
+.pack-family:active {
+    transform: scale(0.97);
+    transition: transform 0.1s ease;
+}
+
+.pack-family::after {
+    content: "→ Agregar pack";
+    display: block;
+    font-size: 0.7rem;
+    color: #ff4444;
+    opacity: 0;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    margin-top: 4px;
+}
+
+.pack-family:hover::after {
+    opacity: 1;
 }
 
 .family-shipping-badge {
@@ -1784,9 +1817,219 @@ html {
     margin-top: 6px;
 }
 
+/* ============================================
+   20. PACKS - EFECTOS DE SELECCIÓN
+   ============================================ */
+
+.pack-option.selected,
+.pack-family.selected {
+    animation: packSelect 0.4s ease;
+}
+
+@keyframes packSelect {
+    0% {
+        transform: scale(1);
+    }
+
+    30% {
+        transform: scale(0.97);
+    }
+
+    60% {
+        transform: scale(1.02);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.pack-option .pack-selected-badge {
+    display: none;
+    background: #00B894;
+    color: white;
+    font-size: 0.6rem;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 12px;
+    margin-left: 8px;
+}
+
+.pack-option.selected .pack-selected-badge {
+    display: inline-block;
+}
 
 /* ============================================
-   PÁGINA DE DETALLE DE PRODUCTO
+   21. PACKS - JERARQUÍA DE ANIMACIONES
+   ============================================ */
+
+/* ESTILOS BASE - Se aplican a todos los packs */
+.pack-option {
+    border-left: 3px solid transparent;
+    transition: all 0.3s ease;
+    position: relative;
+    padding: 12px 14px;
+    border-bottom: 1px solid #f5f5f5;
+    border-radius: 8px;
+    border: 2px solid transparent;
+    cursor: pointer;
+}
+
+.pack-option:last-child {
+    border-bottom: none;
+}
+
+.pack-option .pack-hint {
+    display: none;
+    font-size: 0.55rem;
+    margin-left: 8px;
+    font-weight: 500;
+}
+
+/* ========== NIVEL 1: TRATAMIENTO BÁSICO (Sutil) ========== */
+.pack-option.basico:hover {
+    background: #f8fafc;
+    transform: translateX(4px);
+    border-color: #4A9EC7;
+}
+
+.pack-option.basico:hover .pack-hint {
+    display: inline-block;
+    color: #4A9EC7;
+    animation: fadeInHint 0.3s ease;
+}
+
+@keyframes fadeInHint {
+    from {
+        opacity: 0;
+        transform: translateX(-5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* ========== NIVEL 2: PACK DÚO (Intermedio) ========== */
+.pack-option.duo:hover {
+    background: #f0f7ff;
+    transform: translateX(10px);
+    border-color: #6BB8D9;
+    box-shadow: 0 4px 15px rgba(74, 158, 199, 0.15);
+}
+
+.pack-option.duo:hover .pack-hint {
+    display: inline-block;
+    color: #4A9EC7;
+    font-weight: 600;
+    font-size: 0.6rem;
+    animation: slideHint 0.4s ease;
+}
+
+.pack-option.duo::after {
+    content: "→";
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%) translateX(10px);
+    font-size: 1rem;
+    color: #4A9EC7;
+    opacity: 0;
+    transition: all 0.4s ease;
+}
+
+.pack-option.duo:hover::after {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+}
+
+@keyframes slideHint {
+    from {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+
+/* ============================================
+   22. PACKS + VIDEO - DISEÑO HORIZONTAL
+   ============================================ */
+
+.packs-section .packs-video-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    align-items: start;
+}
+
+.packs-section .packs-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+}
+
+.packs-section .video-container {
+    position: relative;
+    width: 100%;
+    border-radius: 20px;
+    overflow: hidden;
+    background: #000;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+    align-self: stretch;
+    min-height: 300px;
+}
+
+.packs-section .product-video-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding-bottom: 0;
+    min-height: 300px;
+    overflow: hidden;
+}
+
+.packs-section .product-video-wrapper .product-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.packs-section .video-overlay {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 8px 20px;
+    border-radius: 30px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    backdrop-filter: blur(4px);
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+.packs-section .video-overlay .video-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* ============================================
+   23. PRODUCT DETAIL PAGE
    ============================================ */
 
 .product-detail-section {
@@ -1863,160 +2106,8 @@ html {
     border-radius: 40px;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-    .product-detail-grid {
-        grid-template-columns: 1fr;
-        gap: 30px;
-    }
-    
-    .product-detail-info h1 {
-        font-size: 2rem;
-    }
-    
-    .product-detail-price .price-current {
-        font-size: 1.6rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .product-detail-info h1 {
-        font-size: 1.5rem;
-    }
-    
-    .product-detail-price .price-current {
-        font-size: 1.3rem;
-    }
-    
-    .btn-add-to-cart {
-        width: 100%;
-        padding: 14px;
-    }
-}
-
 /* ============================================
-   PACKS + VIDEO - DISEÑO HORIZONTAL
-   ============================================ */
-
-.packs-section .packs-video-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 40px;
-    max-width: 1200px;
-    margin: 0 auto;
-    align-items: start;
-}
-
-/* Packs a la izquierda */
-.packs-section .packs-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 0;
-}
-
-/* Video a la derecha */
-.packs-section .video-container {
-    position: relative;
-    width: 100%;
-    border-radius: 20px;
-    overflow: hidden;
-    background: #000;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
-    align-self: stretch;
-    min-height: 300px;
-}
-
-.packs-section .product-video-wrapper {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    padding-bottom: 0;
-    min-height: 300px;
-    overflow: hidden;
-}
-
-.packs-section .product-video-wrapper .product-video {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-}
-
-.packs-section .video-overlay {
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(0, 0, 0, 0.7);
-    color: white;
-    padding: 8px 20px;
-    border-radius: 30px;
-    font-size: 0.85rem;
-    font-weight: 500;
-    backdrop-filter: blur(4px);
-    pointer-events: none;
-    white-space: nowrap;
-}
-
-.packs-section .video-overlay .video-badge {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-/* Responsive - en móvil el video va abajo */
-@media (max-width: 992px) {
-    .packs-section .packs-video-grid {
-        grid-template-columns: 1fr;
-        gap: 30px;
-    }
-    
-    .packs-section .video-container {
-        min-height: 200px;
-    }
-    
-    .packs-section .product-video-wrapper {
-        min-height: 200px;
-    }
-}
-
-@media (max-width: 768px) {
-    .packs-section .packs-video-grid {
-        gap: 20px;
-    }
-    
-    .packs-section .video-container {
-        min-height: 180px;
-        border-radius: 12px;
-    }
-    
-    .packs-section .product-video-wrapper {
-        min-height: 180px;
-    }
-    
-    .packs-section .video-overlay {
-        bottom: 12px;
-        padding: 6px 14px;
-        font-size: 0.65rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .packs-section .video-container {
-        min-height: 150px;
-        border-radius: 10px;
-    }
-    
-    .packs-section .product-video-wrapper {
-        min-height: 150px;
-    }
-}
-
-/* ============================================
-   HOME - PACKS GRID CORRECTO
+   24. HOME - PACKS GRID CORRECTO
    ============================================ */
 
 .home-packs .packs-grid {
@@ -2031,7 +2122,6 @@ html {
     margin: 0;
 }
 
-/* Para páginas de producto, mantener el layout de packs + video */
 .packs-section:not(.home-packs) .packs-grid {
     display: grid;
     grid-template-columns: 1fr;
@@ -2039,8 +2129,23 @@ html {
 }
 
 /* ============================================
-   19. RESPONSIVE (MEDIA QUERIES)
+   25. RESPONSIVE (MEDIA QUERIES)
    ============================================ */
+
+@media (max-width: 992px) {
+    .packs-section .packs-video-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .packs-section .video-container {
+        min-height: 200px;
+    }
+
+    .packs-section .product-video-wrapper {
+        min-height: 200px;
+    }
+}
 
 @media (max-width: 768px) {
     .navbar {
@@ -2115,6 +2220,38 @@ html {
     .contact-trust {
         font-size: 0.9rem;
     }
+
+    .product-detail-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .product-detail-info h1 {
+        font-size: 2rem;
+    }
+
+    .product-detail-price .price-current {
+        font-size: 1.6rem;
+    }
+
+    .packs-section .packs-video-grid {
+        gap: 20px;
+    }
+
+    .packs-section .video-container {
+        min-height: 180px;
+        border-radius: 12px;
+    }
+
+    .packs-section .product-video-wrapper {
+        min-height: 180px;
+    }
+
+    .packs-section .video-overlay {
+        bottom: 12px;
+        padding: 6px 14px;
+        font-size: 0.65rem;
+    }
 }
 
 @media (max-width: 480px) {
@@ -2166,6 +2303,19 @@ html {
 
     .contact-form button {
         width: 100%;
+    }
+
+    .product-detail-info h1 {
+        font-size: 1.5rem;
+    }
+
+    .product-detail-price .price-current {
+        font-size: 1.3rem;
+    }
+
+    .btn-add-to-cart {
+        width: 100%;
+        padding: 14px;
     }
 
     .cart-modal-content {
@@ -2229,5 +2379,14 @@ html {
     .modal-submit-btn {
         font-size: 1rem;
         padding: 14px;
+    }
+
+    .packs-section .video-container {
+        min-height: 150px;
+        border-radius: 10px;
+    }
+
+    .packs-section .product-video-wrapper {
+        min-height: 150px;
     }
 }

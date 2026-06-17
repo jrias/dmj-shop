@@ -150,8 +150,6 @@ function renderProducts() {
             </div>
             <div class="product-info">
                 <h3>${product.name}</h3>
-                <p class="product-price">$${product.price.toLocaleString()}</p>
-                <button onclick="event.stopPropagation(); addToCart(${product.id})">Agregar al carrito</button>
             </div>
         </div>
     `).join('');
@@ -243,9 +241,6 @@ function renderProductPacks(productId) {
                     </div>
                 </div>
             </div>
-            <div class="pack-card-footer">
-                <button onclick="addAllPacks(${productData.id})">PEDIR</button>
-            </div>
         </div>
     `;
 }
@@ -286,7 +281,7 @@ function renderPacks() {
             </div>
             <div class="pack-options">
                 ${product.packs.map((pack, index) => `
-                    <div class="pack-option" onclick="addPackToCart(${product.id}, ${index})">
+                    <div class="pack-option ${pack.level}" onclick="addPackToCart(${product.id}, ${index})">
                         <div class="pack-name-row">
                             <span class="pack-name">${pack.name}</span>
                             <span class="pack-units">(${pack.units} Unidad${pack.units > 1 ? 'es' : ''})</span>
@@ -295,9 +290,7 @@ function renderPacks() {
                             <span class="pack-price">$${pack.price.toLocaleString()}</span>
                             <span class="pack-description">${pack.description}</span>
                         </div>
-                        ${pack.freeShipping ? `
-                            <div class="pack-shipping-badge">🚚 Envío gratis incluido</div>
-                        ` : ''}
+                        ${pack.freeShipping ? `<div class="pack-shipping-badge">🚚 Envío gratis incluido</div>` : ''}
                         ${pack.savings > 0 ? `
                             <div class="pack-savings">
                                 <span class="savings-label">🟢 AHORRAS</span>
@@ -305,11 +298,13 @@ function renderPacks() {
                                 <span class="savings-percent">${pack.savingsPercent}% dto.</span>
                             </div>
                         ` : ''}
+                        <span class="pack-hint">↕ Seleccionar</span>
                     </div>
                 `).join('')}
                 
-                <!-- PACK FAMILIAR -->
                 <div class="pack-family" onclick="addFamilyToCart(${product.id})">
+                    <span class="family-tag">⭐ RECOMENDADO</span>
+                    <div class="family-badge">🎯 MEJOR OPCIÓN</div>
                     <div class="family-name">${product.family.name}</div>
                     <div class="family-price">$${product.family.price.toLocaleString()}</div>
                     <div class="family-desc">${product.family.description}</div>
@@ -319,9 +314,6 @@ function renderPacks() {
                         <span class="savings-percent">${product.family.savingsPercent}% dto.</span>
                     </div>
                 </div>
-            </div>
-            <div class="pack-card-footer">
-                <button onclick="addAllPacks(${product.id})">PEDIR</button>
             </div>
         </div>
     `).join('');
