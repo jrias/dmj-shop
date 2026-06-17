@@ -116,7 +116,6 @@
 
                 <div class="cart-modal-body">
                     <!-- Mensaje de selección -->
-                    <p class="cart-modal-subtitle">Selecciona primero talla y luego color</p>
 
                     <!-- Productos en el carrito -->
                     <div id="cartModalItems"></div>
@@ -148,6 +147,19 @@
                             <span>Envío gratis</span>
                             <span class="shipping-price">Gratis</span>
                         </label>
+                    </div>
+
+                    <!-- MODAL DE CONFIRMACIÓN PARA CAMBIO DE PACK -->
+                    <div id="confirmModal" class="modal">
+                        <div class="modal-content confirm-modal-content">
+                            <h3>🛒 ¿Cambiar tu selección?</h3>
+                            <p id="confirmMessage">Actualmente tienes <strong id="currentPackName"></strong> en tu
+                                carrito. ¿Quieres agregar <strong id="newPackName"></strong>?</p>
+                            <div class="confirm-buttons">
+                                <button class="btn-outline" id="cancelConfirmBtn">Cancelar</button>
+                                <button class="btn-dark" id="acceptConfirmBtn">Sí, agregar</button>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Formulario de datos -->

@@ -19,8 +19,9 @@ const packsData = [
                 price: 78000,
                 description: "Prueba el producto",
                 savings: 0,
-                savingsPercent: 0,
-                freeShipping: true
+                savingsPercent: 30,
+                freeShipping: true,
+                level: "basico"
             },
             {
                 name: "Pack Dúo",
@@ -29,7 +30,8 @@ const packsData = [
                 description: "Con este combo completas el tratamiento",
                 savings: 46000,
                 savingsPercent: 42,
-                freeShipping: true
+                freeShipping: true,
+                level: "duo"
             }
         ],
         family: {
@@ -53,8 +55,9 @@ const packsData = [
                 price: 72000,
                 description: "Prueba el producto",
                 savings: 0,
-                savingsPercent: 0,
-                freeShipping: true
+                savingsPercent: 30,
+                freeShipping: true,
+                level: "basico"
             },
             {
                 name: "Pack Dúo",
@@ -63,7 +66,8 @@ const packsData = [
                 description: "Con este combo completas el tratamiento",
                 savings: 39000,
                 savingsPercent: 27,
-                freeShipping: true
+                freeShipping: true,
+                level: "duo"
             }
         ],
         family: {
@@ -87,8 +91,9 @@ const packsData = [
                 price: 72000,
                 description: "Prueba el producto",
                 savings: 0,
-                savingsPercent: 0,
-                freeShipping: true
+                savingsPercent: 30,
+                freeShipping: true,
+                level: "basico"
             },
             {
                 name: "Pack Dúo",
@@ -97,7 +102,8 @@ const packsData = [
                 description: "Con este combo completas el tratamiento",
                 savings: 39000,
                 savingsPercent: 27,
-                freeShipping: true
+                freeShipping: true,
+                level: "duo"
             }
         ],
         family: {
@@ -112,6 +118,15 @@ const packsData = [
 ];
 
 let cart = [];
+
+// ============================================
+// VARIABLES PARA EL MODAL DE CONFIRMACIÓN
+// ============================================
+
+let pendingProductId = null;
+let pendingPackIndex = null;
+let pendingIsFamily = false;
+let pendingPackName = '';
 
 // ============================================
 // OBTENER LINK DEL PRODUCTO
@@ -133,6 +148,91 @@ function getProductName(productId) {
         3: "Ranko"
     };
     return names[productId] || "";
+}
+
+// ============================================
+// MODAL DE CONFIRMACIÓN PARA AGREGAR OTRO PACK
+// ============================================
+
+function openConfirmModal(productName, packName, productId, packIndex, isFamily = false) {
+    const modal = document.getElementById('confirmModal');
+    const messageEl = document.getElementById('confirmMessage');
+
+    if (!modal) return;
+
+    if (messageEl) {
+        messageEl.innerHTML = `Ya tienes un pack de <strong>${productName}</strong> en tu carrito. ¿Quieres agregar también <strong>${packName}</strong>?`;
+    }
+
+    pendingProductId = productId;
+    pendingPackIndex = packIndex;
+    pendingIsFamily = isFamily;
+    pendingPackName = packName;
+
+    modal.style.display = 'block';
+}
+
+function closeConfirmModal() {
+    const modal = document.getElementById('confirmModal');
+    if (modal) modal.style.display = 'none';
+    pendingProductId = null;
+    pendingPackIndex = null;
+    pendingIsFamily = false;
+    pendingPackName = '';
+}
+
+function addPackWithConfirm(productId, packIndex, packName) {
+    const product = packsData.find(p => p.id === productId);
+    if (!product) return;
+    
+    // Generar el ID del nuevo pack
+    let newItemId;
+    if (packIndex !== undefined && packIndex !== null) {
+        newItemId = `${productId}-${packIndex}`;
+    } else {
+        newItemId = `${productId}-family`;
+    }
+    
+    // Verificar si el pack específico ya está en el carrito
+    const existingItem = cart.find(item => item.id === newItemId);
+    
+    if (existingItem) {
+        // Si el pack ya existe, mostrar mensaje y aumentar cantidad
+        showToast(`Ya tienes ${packName} en tu carrito. Se ha aumentado la cantidad.`);
+        if (packIndex !== undefined && packIndex !== null) {
+            addPackToCart(productId, packIndex);
+        } else {
+            addFamilyToCart(productId);
+        }
+        return;
+    }
+    
+    // Verificar si hay OTROS packs del mismo producto (no el mismo pack)
+    const hasOtherPacks = cart.some(item => {
+        // El item es del mismo producto pero no es el mismo pack
+        return (item.id.startsWith(`${productId}-`) || item.id === `${productId}`) && item.id !== newItemId;
+    });
+    
+    // Obtener el nombre del nuevo pack
+    let newPackFullName = packName;
+    if (packIndex !== undefined && packIndex !== null) {
+        const pack = product.packs[packIndex];
+        if (pack) newPackFullName = `${product.name} - ${pack.name}`;
+    } else {
+        newPackFullName = `${product.name} - ${product.family.name}`;
+    }
+    
+    if (hasOtherPacks) {
+        // Hay otros packs de este producto - preguntar si quiere agregar
+        openConfirmModal(product.name, newPackFullName, productId, packIndex, packIndex === null);
+    } else {
+        // No hay otros packs, agregar directamente
+        if (packIndex !== undefined && packIndex !== null) {
+            addPackToCart(productId, packIndex);
+        } else {
+            addFamilyToCart(productId);
+        }
+    }
 }
 
 // ============================================
@@ -166,7 +266,6 @@ function renderProductDetail(productId) {
     const descuentoFicticio = 0.30;
     const precioOriginalFicticio = Math.round(product.price / (1 - descuentoFicticio));
 
-    // Actualizar información del producto
     const imageEl = document.querySelector('.product-detail-image img');
     const titleEl = document.querySelector('.product-detail-info h1');
     const subtitleEl = document.querySelector('.product-detail-subtitle');
@@ -186,10 +285,7 @@ function renderProductDetail(productId) {
     if (currentPriceEl) currentPriceEl.textContent = `$${product.price.toLocaleString()}`;
     if (addBtn) addBtn.onclick = () => addToCart(product.id);
 
-    // Renderizar packs específicos del producto
     renderProductPacks(productId);
-    
-    // Renderizar video informativo
     renderProductVideo(productId);
 }
 
@@ -211,7 +307,7 @@ function renderProductPacks(productId) {
             </div>
             <div class="pack-options">
                 ${productData.packs.map((pack, index) => `
-                    <div class="pack-option" onclick="addPackToCart(${productData.id}, ${index})">
+                    <div class="pack-option ${pack.level}" onclick="addPackWithConfirm(${productData.id}, ${index}, '${pack.name}')">
                         <div class="pack-name-row">
                             <span class="pack-name">${pack.name}</span>
                             <span class="pack-units">(${pack.units} Unidad${pack.units > 1 ? 'es' : ''})</span>
@@ -222,15 +318,18 @@ function renderProductPacks(productId) {
                         </div>
                         ${pack.freeShipping ? `<div class="pack-shipping-badge">🚚 Envío gratis incluido</div>` : ''}
                         ${pack.savings > 0 ? `
-                            <div class="pack-savings">
-                                <span class="savings-label">🟢 AHORRAS</span>
-                                <span class="savings-amount">$${pack.savings.toLocaleString()}</span>
-                                <span class="savings-percent">${pack.savingsPercent}% dto.</span>
-                            </div>
-                        ` : ''}
+    <div class="pack-savings">
+        <span class="savings-label">🟢 AHORRAS</span>
+        <span class="savings-amount">$${pack.savings.toLocaleString()}</span>
+        <span class="savings-percent">${pack.savingsPercent}% dto.</span>
+    </div>
+` : ''}
+                        <span class="pack-hint">↕ Seleccionar</span>
                     </div>
                 `).join('')}
-                <div class="pack-family" onclick="addFamilyToCart(${productData.id})">
+                <div class="pack-family" onclick="addPackWithConfirm(${productData.id}, null, '${productData.family.name}')">
+                    <span class="family-tag">⭐ RECOMENDADO</span>
+                    <div class="family-badge">🎯 MEJOR OPCIÓN</div>
                     <div class="family-name">${productData.family.name}</div>
                     <div class="family-price">$${productData.family.price.toLocaleString()}</div>
                     <div class="family-desc">${productData.family.description}</div>
@@ -248,21 +347,18 @@ function renderProductPacks(productId) {
 // ============================================
 // RENDER VIDEO INFORMATIVO DEL PRODUCTO
 // ============================================
+
 function renderProductVideo(productId) {
-    // ⚠️ VIDEO TEMPORALMENTE OCULTO
     const videoContainer = document.getElementById('productVideoContainer');
     if (!videoContainer) return;
-    
-    // Ocultar el contenedor
     videoContainer.style.display = 'none';
-    
-    // O también puedes poner un mensaje
     videoContainer.innerHTML = `
         <div style="text-align:center;padding:40px;color:#999;">
             <p>🎬 Contenido en preparación</p>
         </div>
     `;
 }
+
 // ============================================
 // RENDER PACKS (INDEX)
 // ============================================
@@ -281,7 +377,7 @@ function renderPacks() {
             </div>
             <div class="pack-options">
                 ${product.packs.map((pack, index) => `
-                    <div class="pack-option ${pack.level}" onclick="addPackToCart(${product.id}, ${index})">
+                    <div class="pack-option ${pack.level}" onclick="addPackWithConfirm(${product.id}, ${index}, '${pack.name}')">
                         <div class="pack-name-row">
                             <span class="pack-name">${pack.name}</span>
                             <span class="pack-units">(${pack.units} Unidad${pack.units > 1 ? 'es' : ''})</span>
@@ -292,17 +388,16 @@ function renderPacks() {
                         </div>
                         ${pack.freeShipping ? `<div class="pack-shipping-badge">🚚 Envío gratis incluido</div>` : ''}
                         ${pack.savings > 0 ? `
-                            <div class="pack-savings">
-                                <span class="savings-label">🟢 AHORRAS</span>
-                                <span class="savings-amount">$${pack.savings.toLocaleString()}</span>
-                                <span class="savings-percent">${pack.savingsPercent}% dto.</span>
-                            </div>
-                        ` : ''}
+    <div class="pack-savings">
+        <span class="savings-label">🟢 AHORRAS</span>
+        <span class="savings-amount">$${pack.savings.toLocaleString()}</span>
+        <span class="savings-percent">${pack.savingsPercent}% dto.</span>
+    </div>
+` : ''}
                         <span class="pack-hint">↕ Seleccionar</span>
                     </div>
                 `).join('')}
-                
-                <div class="pack-family" onclick="addFamilyToCart(${product.id})">
+                <div class="pack-family" onclick="addPackWithConfirm(${product.id}, null, '${product.family.name}')">
                     <span class="family-tag">⭐ RECOMENDADO</span>
                     <div class="family-badge">🎯 MEJOR OPCIÓN</div>
                     <div class="family-name">${product.family.name}</div>
@@ -520,16 +615,11 @@ function renderCartSidebar() {
         return;
     }
 
-    // ✅ Calcular subtotal REAL
     const subtotalReal = cart.reduce((sum, i) => sum + (i.price * (i.quantity || 1)), 0);
-
-    // ✅ Calcular descuento total basado en los porcentajes de cada pack
     let descuentoTotal = 0;
 
     cart.forEach(item => {
         let packDescuento = 0;
-
-        // Buscar en packsData
         for (const product of packsData) {
             const packIndex = product.packs.findIndex((p, index) => `${product.id}-${index}` === item.id);
             if (packIndex !== -1) {
@@ -541,7 +631,6 @@ function renderCartSidebar() {
                 break;
             }
         }
-
         const itemTotal = item.price * (item.quantity || 1);
         const descuentoItem = itemTotal * (packDescuento / 100);
         descuentoTotal += descuentoItem;
@@ -552,25 +641,21 @@ function renderCartSidebar() {
     sidebarContent.innerHTML = `
         <div class="cart-items-list">
             ${cart.map(item => {
-                const precioReal = item.price * (item.quantity || 1);
-                let packDescuento = 0;
-
-                // Buscar el porcentaje de descuento del item
-                for (const product of packsData) {
-                    const packIndex = product.packs.findIndex((p, index) => `${product.id}-${index}` === item.id);
-                    if (packIndex !== -1) {
-                        packDescuento = product.packs[packIndex].savingsPercent || 0;
-                        break;
-                    }
-                    if (`${product.id}-family` === item.id) {
-                        packDescuento = product.family.savingsPercent || 0;
-                        break;
-                    }
-                }
-
-                const precioOriginalFicticio = packDescuento > 0 ? Math.round(precioReal / (1 - (packDescuento / 100))) : precioReal;
-
-                return `
+        const precioReal = item.price * (item.quantity || 1);
+        let packDescuento = 0;
+        for (const product of packsData) {
+            const packIndex = product.packs.findIndex((p, index) => `${product.id}-${index}` === item.id);
+            if (packIndex !== -1) {
+                packDescuento = product.packs[packIndex].savingsPercent || 0;
+                break;
+            }
+            if (`${product.id}-family` === item.id) {
+                packDescuento = product.family.savingsPercent || 0;
+                break;
+            }
+        }
+        const precioOriginalFicticio = packDescuento > 0 ? Math.round(precioReal / (1 - (packDescuento / 100))) : precioReal;
+        return `
                 <div class="cart-sidebar-item">
                     <div class="cart-item-image">
                         <img src="${item.image}" alt="${item.name}">
@@ -625,7 +710,6 @@ function renderCartSidebar() {
 function openCartModal() {
     const modal = document.getElementById('cartModal');
     if (!modal) return;
-
     renderCartModalItems();
     modal.classList.add('show');
     document.body.style.overflow = 'hidden';
@@ -654,63 +738,43 @@ function renderCartModalItems() {
         return;
     }
 
-    // ✅ Calcular subtotal REAL (sin descuento)
     const subtotalReal = cart.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
-
-    // ✅ Calcular descuento total basado en los porcentajes de cada pack
     let descuentoTotal = 0;
-    let descuentoPorcentajePromedio = 0;
 
     cart.forEach(item => {
-        // Buscar el pack correspondiente en packsData para obtener su porcentaje de descuento
-        const packId = item.id;
         let packDescuento = 0;
-        let packPrecio = item.price;
-
-        // Buscar en packsData
         for (const product of packsData) {
-            // Buscar en packs individuales
-            const packIndex = product.packs.findIndex((p, index) => `${product.id}-${index}` === packId);
+            const packIndex = product.packs.findIndex((p, index) => `${product.id}-${index}` === item.id);
             if (packIndex !== -1) {
                 packDescuento = product.packs[packIndex].savingsPercent || 0;
                 break;
             }
-            // Buscar en pack familiar
-            if (`${product.id}-family` === packId) {
+            if (`${product.id}-family` === item.id) {
                 packDescuento = product.family.savingsPercent || 0;
                 break;
             }
         }
-
-        // Si no se encontró en packsData, usar el descuento del producto base
         if (packDescuento === 0) {
-            // Buscar en products
-            const product = products.find(p => p.id === parseInt(packId));
+            const product = products.find(p => p.id === parseInt(item.id));
             if (product) {
-                // Para productos base, usar el descuento del tratamiento básico (si existe)
                 const productData = packsData.find(p => p.id === product.id);
                 if (productData && productData.packs.length > 0) {
                     packDescuento = productData.packs[0].savingsPercent || 0;
                 }
             }
         }
-
         const itemTotal = item.price * (item.quantity || 1);
         const descuentoItem = itemTotal * (packDescuento / 100);
         descuentoTotal += descuentoItem;
-
-        // Para el badge individual
         item._descuentoPorcentaje = packDescuento;
     });
 
-    const totalConDescuento = subtotalReal - descuentoTotal;
     const descuentoPorcentajeTotal = subtotalReal > 0 ? Math.round((descuentoTotal / subtotalReal) * 100) : 0;
 
     container.innerHTML = cart.map(item => {
         const precioReal = item.price * (item.quantity || 1);
         const descuentoItem = item._descuentoPorcentaje || 0;
         const precioOriginalFicticio = Math.round(precioReal / (1 - (descuentoItem / 100)));
-
         return `
         <div class="cart-modal-item">
             <div class="cart-modal-item-info">
@@ -722,7 +786,6 @@ function renderCartModalItems() {
                         ${item.name}
                         <span class="cart-modal-item-discount-badge">-${descuentoItem}%</span>
                     </div>
-                    <div class="cart-modal-item-detail">Color: ${item.color || 'N/A'}</div>
                     <div class="cart-modal-item-quantity">
                         <button onclick="updateModalQuantity('${item.id}', -1)">−</button>
                         <span id="modal-qty-${item.id}">${item.quantity || 1}</span>
@@ -738,7 +801,6 @@ function renderCartModalItems() {
         </div>
     `}).join('');
 
-    // Resumen con descuento MOSTRADO pero NO aplicado realmente
     const summaryHTML = `
         <div class="cart-modal-summary">
             <div class="summary-row">
@@ -870,18 +932,14 @@ async function submitOrder(e) {
 
 async function submitOrderModal(phone, name, email, address, city, neighborhood) {
     const fullName = name;
-
     const items = cart.map(item => ({
         id: item.id,
         nombre: item.name,
         precio: item.price,
         cantidad: item.quantity || 1
     }));
-
     const total = cart.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
-
     const direccionCompleta = `${address}, ${neighborhood}, ${city}`;
-
     const orderData = {
         items: items,
         cliente: {
@@ -901,9 +959,7 @@ async function submitOrderModal(phone, name, email, address, city, neighborhood)
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(orderData)
         });
-
         const result = await response.json();
-
         if (response.ok && result.exito) {
             cart = [];
             saveCart();
@@ -936,10 +992,51 @@ function showToast(message) {
 }
 
 // ============================================
-// FORMULARIO DE CONTACTO
+// EVENTOS DEL MODAL DE CONFIRMACIÓN Y DOM
 // ============================================
 
 document.addEventListener('DOMContentLoaded', function () {
+    // ============================================
+    // MODAL DE CONFIRMACIÓN
+    // ============================================
+
+    const cancelBtn = document.getElementById('cancelConfirmBtn');
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', closeConfirmModal);
+    }
+
+    const acceptBtn = document.getElementById('acceptConfirmBtn');
+    if (acceptBtn) {
+        acceptBtn.addEventListener('click', function () {
+            if (pendingProductId !== null) {
+                // Agregar el nuevo pack SIN eliminar el existente
+                if (pendingPackIndex !== undefined && pendingPackIndex !== null) {
+                    addPackToCart(pendingProductId, pendingPackIndex);
+                } else if (pendingIsFamily) {
+                    addFamilyToCart(pendingProductId);
+                }
+
+                saveCart();
+                updateCartDisplay();
+                renderCartSidebar();
+                renderCartModalItems();
+            }
+            closeConfirmModal();
+        });
+    }
+
+    // Cerrar modal al hacer clic fuera
+    window.addEventListener('click', function (e) {
+        const modal = document.getElementById('confirmModal');
+        if (e.target === modal) {
+            closeConfirmModal();
+        }
+    });
+
+    // ============================================
+    // INICIALIZACIÓN DE LA PÁGINA
+    // ============================================
+
     renderProducts();
     renderPacks();
     loadCart();
@@ -1027,9 +1124,7 @@ document.addEventListener('DOMContentLoaded', function () {
             await submitOrderModal(phone, name, email, address, city, neighborhood);
         });
     }
-});
 
-document.addEventListener('DOMContentLoaded', function () {
     const continueBtn = document.querySelector('.continue-shopping');
     if (continueBtn) {
         continueBtn.addEventListener('click', closeCart);

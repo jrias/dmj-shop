@@ -530,6 +530,44 @@ textarea,
 }
 
 /* ============================================
+   MODAL DE CONFIRMACIÓN PARA CAMBIO DE PACK
+   ============================================ */
+
+.confirm-modal-content {
+    max-width: 450px;
+    text-align: center;
+}
+
+.confirm-modal-content h3 {
+    font-size: 1.3rem;
+    margin-bottom: 16px;
+}
+
+.confirm-modal-content p {
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 24px;
+}
+
+.confirm-modal-content p strong {
+    color: #000;
+}
+
+.confirm-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.confirm-buttons .btn-outline {
+    padding: 10px 24px;
+}
+
+.confirm-buttons .btn-dark {
+    padding: 10px 24px;
+}
+/* ============================================
    9. FORMULARIOS
    ============================================ */
 
