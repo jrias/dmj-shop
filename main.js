@@ -546,8 +546,11 @@ function renderCartSidebar() {
         return;
     }
 
-    // ✅ SIN descuento ficticio - precios reales
+    // ✅ Precios reales SIN descuento adicional
     const subtotalReal = cart.reduce((sum, i) => sum + (i.price * (i.quantity || 1)), 0);
+    
+    // Descuento ficticio SOLO PARA MOSTRAR
+    const descuentoMostrado = subtotalReal * (0.30 / 0.70);
 
     sidebarContent.innerHTML = `
         <div class="cart-items-list">
@@ -583,7 +586,7 @@ function renderCartSidebar() {
             </div>
             <div class="summary-row discount">
                 <span class="summary-label">Descuento</span>
-                <span class="summary-value">-$0 (0%)</span>
+                <span class="summary-value">-$${Math.round(descuentoMostrado).toLocaleString()} (30%)</span>
             </div>
             <div class="summary-row shipping">
                 <span class="summary-label">Envío</span>
@@ -636,12 +639,17 @@ function renderCartModalItems() {
         return;
     }
 
-    // ✅ SIN descuento ficticio - los precios ya son los reales con descuento
+    // ✅ Precios reales SIN descuento adicional
     const subtotalReal = cart.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
+    
+    // Descuento ficticio SOLO PARA MOSTRAR (30% sobre el precio original ficticio)
+    const descuentoFicticio = 0.30;
+    const descuentoMostrado = subtotalReal * (descuentoFicticio / (1 - descuentoFicticio));
+    const totalConDescuento = subtotalReal; // El precio real
 
     container.innerHTML = cart.map(item => {
         const precioReal = item.price * (item.quantity || 1);
-        // Precio original ficticio para mostrar (30% más alto)
+        // Precio original ficticio (30% más alto)
         const precioOriginalFicticio = Math.round(precioReal / 0.7);
 
         return `
@@ -671,7 +679,7 @@ function renderCartModalItems() {
         </div>
     `}).join('');
 
-    // Resumen SIN descuento adicional
+    // Resumen con descuento MOSTRADO pero NO aplicado
     const summaryHTML = `
         <div class="cart-modal-summary">
             <div class="summary-row">
@@ -680,7 +688,7 @@ function renderCartModalItems() {
             </div>
             <div class="summary-row discount">
                 <span class="summary-label">Descuento</span>
-                <span class="summary-value" id="modalDescuento">-$0 (0%)</span>
+                <span class="summary-value" id="modalDescuento">-$${Math.round(descuentoMostrado).toLocaleString()} (30%)</span>
             </div>
             <div class="summary-row shipping">
                 <span class="summary-label">Envío</span>
