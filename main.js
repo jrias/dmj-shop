@@ -257,9 +257,9 @@ function renderProductPacks(productId) {
 function renderProductVideo(productId) {
     // Mapeo de videos por producto - NUEVOS NOMBRES
     const videos = {
-        1: "/Medios/videos/royceVideo.mp4",   // Video para RoyceDerm
-        2: "/Medios/videos/biotinVideo.mp4",   // Video para Biotin
-        3: "/Medios/videos/rankoVideo.mp4"     // Video para Ranko
+        1: "/Medios/Videos/royceVideo.mp4",   // Video para RoyceDerm
+        2: "/Medios/Videos/biotinVideo.mp4",   // Video para Biotin
+        3: "/Medios/Videos/rankoVideo.mp4"     // Video para Ranko
     };
 
     const videoSrc = videos[productId] || "";
