@@ -546,16 +546,14 @@ function renderCartSidebar() {
         return;
     }
 
-    const descuentoFicticio = 0.30;
+    // ✅ SIN descuento ficticio - precios reales
     const subtotalReal = cart.reduce((sum, i) => sum + (i.price * (i.quantity || 1)), 0);
-    const descuentoAplicado = subtotalReal * descuentoFicticio;
-    const totalReal = subtotalReal - descuentoAplicado;
 
     sidebarContent.innerHTML = `
         <div class="cart-items-list">
             ${cart.map(item => {
         const precioReal = item.price * (item.quantity || 1);
-        const precioOriginalFicticio = Math.round(precioReal / (1 - descuentoFicticio));
+        const precioOriginalFicticio = Math.round(precioReal / 0.7);
 
         return `
                 <div class="cart-sidebar-item">
@@ -585,7 +583,7 @@ function renderCartSidebar() {
             </div>
             <div class="summary-row discount">
                 <span class="summary-label">Descuento</span>
-                <span class="summary-value">-$${descuentoAplicado.toLocaleString()} (${Math.round(descuentoFicticio * 100)}%)</span>
+                <span class="summary-value">-$0 (0%)</span>
             </div>
             <div class="summary-row shipping">
                 <span class="summary-label">Envío</span>
@@ -593,7 +591,7 @@ function renderCartSidebar() {
             </div>
             <div class="summary-row total">
                 <span class="summary-label">Total</span>
-                <span class="summary-value">$${totalReal.toLocaleString()}</span>
+                <span class="summary-value">$${subtotalReal.toLocaleString()}</span>
             </div>
         </div>
         <div class="cart-sidebar-footer">
@@ -638,14 +636,13 @@ function renderCartModalItems() {
         return;
     }
 
-    const descuentoFicticio = 0.30;
+    // ✅ SIN descuento ficticio - los precios ya son los reales con descuento
     const subtotalReal = cart.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
-    const descuentoAplicado = subtotalReal * descuentoFicticio;
-    const totalReal = subtotalReal - descuentoAplicado;
 
     container.innerHTML = cart.map(item => {
         const precioReal = item.price * (item.quantity || 1);
-        const precioOriginalFicticio = Math.round(precioReal / (1 - descuentoFicticio));
+        // Precio original ficticio para mostrar (30% más alto)
+        const precioOriginalFicticio = Math.round(precioReal / 0.7);
 
         return `
         <div class="cart-modal-item">
@@ -656,7 +653,7 @@ function renderCartModalItems() {
                 <div class="cart-modal-item-details">
                     <div class="cart-modal-item-name">
                         ${item.name}
-                        <span class="cart-modal-item-discount-badge">-${Math.round(descuentoFicticio * 100)}%</span>
+                        <span class="cart-modal-item-discount-badge">-30%</span>
                     </div>
                     <div class="cart-modal-item-detail">Color: ${item.color || 'N/A'}</div>
                     <div class="cart-modal-item-quantity">
@@ -674,6 +671,7 @@ function renderCartModalItems() {
         </div>
     `}).join('');
 
+    // Resumen SIN descuento adicional
     const summaryHTML = `
         <div class="cart-modal-summary">
             <div class="summary-row">
@@ -682,7 +680,7 @@ function renderCartModalItems() {
             </div>
             <div class="summary-row discount">
                 <span class="summary-label">Descuento</span>
-                <span class="summary-value" id="modalDescuento">-$${descuentoAplicado.toLocaleString()} (${Math.round(descuentoFicticio * 100)}%)</span>
+                <span class="summary-value" id="modalDescuento">-$0 (0%)</span>
             </div>
             <div class="summary-row shipping">
                 <span class="summary-label">Envío</span>
@@ -690,7 +688,7 @@ function renderCartModalItems() {
             </div>
             <div class="summary-row total">
                 <span class="summary-label">Total</span>
-                <span class="summary-value" id="modalTotal">$${totalReal.toLocaleString()}</span>
+                <span class="summary-value" id="modalTotal">$${subtotalReal.toLocaleString()}</span>
             </div>
         </div>
     `;
