@@ -253,8 +253,8 @@ function renderProductPacks(productId) {
 // ============================================
 // RENDER VIDEO INFORMATIVO DEL PRODUCTO
 // ============================================
-
 function renderProductVideo(productId) {
+    // Ruta exacta que funciona en el navegador
     const videos = {
         1: "/Medios/videos/royceVideo.mp4",
         2: "/Medios/videos/biotinVideo.mp4",
@@ -271,10 +271,10 @@ function renderProductVideo(productId) {
         <div class="product-video-wrapper">
             <video 
                 autoplay 
-                loop 
                 muted 
+                loop
                 playsinline
-                preload="auto"
+                preload="metadata"
                 class="product-video"
             >
                 <source src="${videoSrc}" type="video/mp4">
@@ -286,7 +286,6 @@ function renderProductVideo(productId) {
         </div>
     `;
 }
-
 // ============================================
 // RENDER PACKS (INDEX)
 // ============================================

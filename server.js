@@ -14,7 +14,7 @@ app.use(express.json());
 
 // Servir archivos estáticos
 app.use(express.static(__dirname));
-app.use('/medios', express.static(path.join(__dirname, 'medios')));
+app.use('/Medios', express.static(path.join(__dirname, 'Medios')));
 
 // Productos
 const productos = [
