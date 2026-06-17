@@ -520,19 +520,57 @@ function renderCartSidebar() {
         return;
     }
 
-    // ✅ Precios reales SIN descuento adicional
+    // ✅ Calcular subtotal REAL
     const subtotalReal = cart.reduce((sum, i) => sum + (i.price * (i.quantity || 1)), 0);
-    
-    // Descuento ficticio SOLO PARA MOSTRAR
-    const descuentoMostrado = subtotalReal * (0.30 / 0.70);
+
+    // ✅ Calcular descuento total basado en los porcentajes de cada pack
+    let descuentoTotal = 0;
+
+    cart.forEach(item => {
+        let packDescuento = 0;
+
+        // Buscar en packsData
+        for (const product of packsData) {
+            const packIndex = product.packs.findIndex((p, index) => `${product.id}-${index}` === item.id);
+            if (packIndex !== -1) {
+                packDescuento = product.packs[packIndex].savingsPercent || 0;
+                break;
+            }
+            if (`${product.id}-family` === item.id) {
+                packDescuento = product.family.savingsPercent || 0;
+                break;
+            }
+        }
+
+        const itemTotal = item.price * (item.quantity || 1);
+        const descuentoItem = itemTotal * (packDescuento / 100);
+        descuentoTotal += descuentoItem;
+    });
+
+    const descuentoPorcentajeTotal = subtotalReal > 0 ? Math.round((descuentoTotal / subtotalReal) * 100) : 0;
 
     sidebarContent.innerHTML = `
         <div class="cart-items-list">
             ${cart.map(item => {
-        const precioReal = item.price * (item.quantity || 1);
-        const precioOriginalFicticio = Math.round(precioReal / 0.7);
+                const precioReal = item.price * (item.quantity || 1);
+                let packDescuento = 0;
 
-        return `
+                // Buscar el porcentaje de descuento del item
+                for (const product of packsData) {
+                    const packIndex = product.packs.findIndex((p, index) => `${product.id}-${index}` === item.id);
+                    if (packIndex !== -1) {
+                        packDescuento = product.packs[packIndex].savingsPercent || 0;
+                        break;
+                    }
+                    if (`${product.id}-family` === item.id) {
+                        packDescuento = product.family.savingsPercent || 0;
+                        break;
+                    }
+                }
+
+                const precioOriginalFicticio = packDescuento > 0 ? Math.round(precioReal / (1 - (packDescuento / 100))) : precioReal;
+
+                return `
                 <div class="cart-sidebar-item">
                     <div class="cart-item-image">
                         <img src="${item.image}" alt="${item.name}">
@@ -540,8 +578,11 @@ function renderCartSidebar() {
                     <div class="cart-item-details">
                         <h4>${item.name}</h4>
                         <div class="cart-item-price">
-                            <span style="text-decoration: line-through; color: #999; font-size: 0.8rem; margin-right: 8px;">$${precioOriginalFicticio.toLocaleString()}</span>
+                            ${packDescuento > 0 ? `
+                                <span style="text-decoration: line-through; color: #999; font-size: 0.8rem; margin-right: 8px;">$${precioOriginalFicticio.toLocaleString()}</span>
+                            ` : ''}
                             <span style="color: #00B894; font-weight: 700; font-size: 1rem;">$${precioReal.toLocaleString()}</span>
+                            ${packDescuento > 0 ? `<span style="color: #ff4444; font-size: 0.6rem; margin-left: 4px;">-${packDescuento}%</span>` : ''}
                         </div>
                         <div class="cart-item-quantity">
                             <button onclick="updateQuantity('${item.id}', -1)">-</button>
@@ -560,7 +601,7 @@ function renderCartSidebar() {
             </div>
             <div class="summary-row discount">
                 <span class="summary-label">Descuento</span>
-                <span class="summary-value">-$${Math.round(descuentoMostrado).toLocaleString()} (30%)</span>
+                <span class="summary-value">-$${Math.round(descuentoTotal).toLocaleString()} (${descuentoPorcentajeTotal}%)</span>
             </div>
             <div class="summary-row shipping">
                 <span class="summary-label">Envío</span>
@@ -613,18 +654,62 @@ function renderCartModalItems() {
         return;
     }
 
-    // ✅ Precios reales SIN descuento adicional
+    // ✅ Calcular subtotal REAL (sin descuento)
     const subtotalReal = cart.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
-    
-    // Descuento ficticio SOLO PARA MOSTRAR (30% sobre el precio original ficticio)
-    const descuentoFicticio = 0.30;
-    const descuentoMostrado = subtotalReal * (descuentoFicticio / (1 - descuentoFicticio));
-    const totalConDescuento = subtotalReal; // El precio real
+
+    // ✅ Calcular descuento total basado en los porcentajes de cada pack
+    let descuentoTotal = 0;
+    let descuentoPorcentajePromedio = 0;
+
+    cart.forEach(item => {
+        // Buscar el pack correspondiente en packsData para obtener su porcentaje de descuento
+        const packId = item.id;
+        let packDescuento = 0;
+        let packPrecio = item.price;
+
+        // Buscar en packsData
+        for (const product of packsData) {
+            // Buscar en packs individuales
+            const packIndex = product.packs.findIndex((p, index) => `${product.id}-${index}` === packId);
+            if (packIndex !== -1) {
+                packDescuento = product.packs[packIndex].savingsPercent || 0;
+                break;
+            }
+            // Buscar en pack familiar
+            if (`${product.id}-family` === packId) {
+                packDescuento = product.family.savingsPercent || 0;
+                break;
+            }
+        }
+
+        // Si no se encontró en packsData, usar el descuento del producto base
+        if (packDescuento === 0) {
+            // Buscar en products
+            const product = products.find(p => p.id === parseInt(packId));
+            if (product) {
+                // Para productos base, usar el descuento del tratamiento básico (si existe)
+                const productData = packsData.find(p => p.id === product.id);
+                if (productData && productData.packs.length > 0) {
+                    packDescuento = productData.packs[0].savingsPercent || 0;
+                }
+            }
+        }
+
+        const itemTotal = item.price * (item.quantity || 1);
+        const descuentoItem = itemTotal * (packDescuento / 100);
+        descuentoTotal += descuentoItem;
+
+        // Para el badge individual
+        item._descuentoPorcentaje = packDescuento;
+    });
+
+    const totalConDescuento = subtotalReal - descuentoTotal;
+    const descuentoPorcentajeTotal = subtotalReal > 0 ? Math.round((descuentoTotal / subtotalReal) * 100) : 0;
 
     container.innerHTML = cart.map(item => {
         const precioReal = item.price * (item.quantity || 1);
-        // Precio original ficticio (30% más alto)
-        const precioOriginalFicticio = Math.round(precioReal / 0.7);
+        const descuentoItem = item._descuentoPorcentaje || 0;
+        const precioOriginalFicticio = Math.round(precioReal / (1 - (descuentoItem / 100)));
 
         return `
         <div class="cart-modal-item">
@@ -635,7 +720,7 @@ function renderCartModalItems() {
                 <div class="cart-modal-item-details">
                     <div class="cart-modal-item-name">
                         ${item.name}
-                        <span class="cart-modal-item-discount-badge">-30%</span>
+                        <span class="cart-modal-item-discount-badge">-${descuentoItem}%</span>
                     </div>
                     <div class="cart-modal-item-detail">Color: ${item.color || 'N/A'}</div>
                     <div class="cart-modal-item-quantity">
@@ -653,7 +738,7 @@ function renderCartModalItems() {
         </div>
     `}).join('');
 
-    // Resumen con descuento MOSTRADO pero NO aplicado
+    // Resumen con descuento MOSTRADO pero NO aplicado realmente
     const summaryHTML = `
         <div class="cart-modal-summary">
             <div class="summary-row">
@@ -662,7 +747,7 @@ function renderCartModalItems() {
             </div>
             <div class="summary-row discount">
                 <span class="summary-label">Descuento</span>
-                <span class="summary-value" id="modalDescuento">-$${Math.round(descuentoMostrado).toLocaleString()} (30%)</span>
+                <span class="summary-value" id="modalDescuento">-$${Math.round(descuentoTotal).toLocaleString()} (${descuentoPorcentajeTotal}%)</span>
             </div>
             <div class="summary-row shipping">
                 <span class="summary-label">Envío</span>
