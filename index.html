@@ -34,154 +34,155 @@
             <p>Descubra los mejores productos con la mayor tecnologia de cuidados para la piel</p>
         </div>
 
-        <div class="products-section">
-            <div class="products-grid" id="productsGrid"></div>
-        </div>
-
-         <!-- SECCIÓN DE PACKS CON AHORROS -->
+        <!-- SECCIÓN DE PACKS CON AHORROS - PRIMERO -->
         <div class="packs-section home-packs">
             <h2>ESTRUCTURA DE PRECIOS DE ALTA CONVERSIÓN</h2>
             <p class="packs-subtitle">MCD - Tu Tienda de Cuidado Personal</p>
             <div class="packs-grid" id="packsGrid"></div>
         </div>
 
+        <!-- PRODUCTOS - DESPUÉS -->
+        <div class="products-section">
+            <div class="products-grid" id="productsGrid"></div>
+        </div>
+
         <div class="footer">
             <p>© 2026 MCD – Descubra el futuro del cuidado de la piel.</p>
             <p>Todos los derechos reservados</p>
         </div>
-    </div>
 
-    <div id="cartSidebar" class="cart-sidebar">
-        <div class="cart-sidebar-header">
-            <h2>Carrito</h2>
-            <button class="close-cart" id="closeCartBtn">&times;</button>
-        </div>
-        <div class="cart-sidebar-content" id="cartSidebarContent">
-            <div class="empty-cart">
-                <p>🛒 Su carrito de compras esta vacio</p>
-                <button class="btn-dark continue-shopping">Seguir comprando</button>
+        <div id="cartSidebar" class="cart-sidebar">
+            <div class="cart-sidebar-header">
+                <h2>Carrito</h2>
+                <button class="close-cart" id="closeCartBtn">&times;</button>
+            </div>
+            <div class="cart-sidebar-content" id="cartSidebarContent">
+                <div class="empty-cart">
+                    <p>🛒 Su carrito de compras esta vacio</p>
+                    <button class="btn-dark continue-shopping">Seguir comprando</button>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div id="cartOverlay" class="cart-overlay"></div>
+        <div id="cartOverlay" class="cart-overlay"></div>
 
-    <div id="checkoutModal" class="modal">
-        <div class="modal-content">
-            <span class="close-checkout">&times;</span>
-            <h2>Cerrar Orden</h2>
-            <form id="checkoutForm">
-                <div class="form-group">
-                    <label>Nombre *</label>
-                    <input type="text" id="customerName" required>
-                </div>
-                <div class="form-group">
-                    <label>Email *</label>
-                    <input type="email" id="customerEmail" required>
-                </div>
-                <div class="form-group">
-                    <label>Telefono</label>
-                    <input type="tel" id="customerPhone">
-                </div>
-                <div class="form-group">
-                    <label>Direccion *</label>
-                    <input type="text" id="customerAddress">
-                </div>
-                <div id="orderSummary"></div>
-                <button type="submit" class="btn-dark">Ordenar ahora</button>
-            </form>
-        </div>
-    </div>
-
-    <div id="successModal" class="modal">
-        <div class="modal-content">
-            <span class="close-success">&times;</span>
-            <div class="success-content">
-                <div class="success-icon">✅</div>
-                <h2>Muchas gracias por su compra!</h2>
-                <p>Hemos recibido su pedido y lo procesaremos lo antes posible.</p>
-                <p>Recibirá un correo electrónico de confirmación a la dirección de correo electrónico especificada.</p>
-                <button class="btn-dark" id="closeSuccessBtn">Weiter einkaufen</button>
-            </div>
-        </div>
-    </div>
-    <!-- CART MODAL EMERGENTE (como imagen) -->
-    <div id="cartModal" class="cart-modal">
-        <div class="cart-modal-content">
-            <div class="cart-modal-header">
-                <h2>🛒 PAGO CONTRAENTREGA</h2>
-                <button class="close-cart-modal" id="closeCartModal">&times;</button>
-            </div>
-
-            <div class="cart-modal-body">
-                <!-- Mensaje de selección -->
-                <p class="cart-modal-subtitle">Selecciona primero talla y luego color</p>
-
-                <!-- Productos en el carrito -->
-                <div id="cartModalItems"></div>
-
-                <!-- Resumen de precios -->
-                <div class="cart-modal-summary">
-                    <div class="summary-row">
-                        <span>Subtotal</span>
-                        <span id="modalSubtotal">$0.00</span>
-                    </div>
-                    <div class="summary-row">
-                        <span>Descuento</span>
-                        <span id="modalDescuento">$0.00</span>
-                    </div>
-                    <div class="summary-row">
-                        <span>Envío</span>
-                        <span>Gratis</span>
-                    </div>
-                    <div class="summary-row total">
-                        <span>Total</span>
-                        <span id="modalTotal">$0.00</span>
-                    </div>
-                </div>
-
-                <!-- Opciones de envío -->
-                <div class="shipping-options">
-                    <label class="shipping-option">
-                        <input type="radio" name="shipping" checked>
-                        <span>Envío gratis</span>
-                        <span class="shipping-price">Gratis</span>
-                    </label>
-                </div>
-
-                <!-- Formulario de datos -->
-                <form id="modalCheckoutForm">
+        <div id="checkoutModal" class="modal">
+            <div class="modal-content">
+                <span class="close-checkout">&times;</span>
+                <h2>Cerrar Orden</h2>
+                <form id="checkoutForm">
                     <div class="form-group">
-                        <label>Nombre completo *</label>
-                        <input type="text" id="modalName" placeholder="Ej: Juan Pérez" required>
+                        <label>Nombre *</label>
+                        <input type="text" id="customerName" required>
                     </div>
                     <div class="form-group">
                         <label>Email *</label>
-                        <input type="email" id="modalEmail" placeholder="tucorreo@ejemplo.com" required>
+                        <input type="email" id="customerEmail" required>
                     </div>
                     <div class="form-group">
-                        <label>Teléfono / WhatsApp *</label>
-                        <input type="tel" id="modalPhone" placeholder="Ej: 3001234567" required>
+                        <label>Telefono</label>
+                        <input type="tel" id="customerPhone">
                     </div>
                     <div class="form-group">
-                        <label>Dirección *</label>
-                        <input type="text" id="modalAddress" placeholder="Ej: Calle 123 #45-67" required>
+                        <label>Direccion *</label>
+                        <input type="text" id="customerAddress">
                     </div>
-                    <div class="form-group">
-                        <label>Ciudad *</label>
-                        <input type="text" id="modalCity" placeholder="Ej: Bogotá" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Barrio / Comuna *</label>
-                        <input type="text" id="modalNeighborhood" placeholder="Ej: Chapinero" required>
-                    </div>
-                    <button type="submit" class="btn-dark modal-submit-btn">Confirmar pedido</button>
+                    <div id="orderSummary"></div>
+                    <button type="submit" class="btn-dark">Ordenar ahora</button>
                 </form>
             </div>
         </div>
-    </div>
 
-    <script src="main.js"></script>
+        <div id="successModal" class="modal">
+            <div class="modal-content">
+                <span class="close-success">&times;</span>
+                <div class="success-content">
+                    <div class="success-icon">✅</div>
+                    <h2>Muchas gracias por su compra!</h2>
+                    <p>Hemos recibido su pedido y lo procesaremos lo antes posible.</p>
+                    <p>Recibirá un correo electrónico de confirmación a la dirección de correo electrónico especificada.
+                    </p>
+                    <button class="btn-dark" id="closeSuccessBtn">Weiter einkaufen</button>
+                </div>
+            </div>
+        </div>
+        <!-- CART MODAL EMERGENTE (como imagen) -->
+        <div id="cartModal" class="cart-modal">
+            <div class="cart-modal-content">
+                <div class="cart-modal-header">
+                    <h2>🛒 PAGO CONTRAENTREGA</h2>
+                    <button class="close-cart-modal" id="closeCartModal">&times;</button>
+                </div>
+
+                <div class="cart-modal-body">
+                    <!-- Mensaje de selección -->
+                    <p class="cart-modal-subtitle">Selecciona primero talla y luego color</p>
+
+                    <!-- Productos en el carrito -->
+                    <div id="cartModalItems"></div>
+
+                    <!-- Resumen de precios -->
+                    <div class="cart-modal-summary">
+                        <div class="summary-row">
+                            <span>Subtotal</span>
+                            <span id="modalSubtotal">$0.00</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Descuento</span>
+                            <span id="modalDescuento">$0.00</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Envío</span>
+                            <span>Gratis</span>
+                        </div>
+                        <div class="summary-row total">
+                            <span>Total</span>
+                            <span id="modalTotal">$0.00</span>
+                        </div>
+                    </div>
+
+                    <!-- Opciones de envío -->
+                    <div class="shipping-options">
+                        <label class="shipping-option">
+                            <input type="radio" name="shipping" checked>
+                            <span>Envío gratis</span>
+                            <span class="shipping-price">Gratis</span>
+                        </label>
+                    </div>
+
+                    <!-- Formulario de datos -->
+                    <form id="modalCheckoutForm">
+                        <div class="form-group">
+                            <label>Nombre completo *</label>
+                            <input type="text" id="modalName" placeholder="Ej: Juan Pérez" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email *</label>
+                            <input type="email" id="modalEmail" placeholder="tucorreo@ejemplo.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Teléfono / WhatsApp *</label>
+                            <input type="tel" id="modalPhone" placeholder="Ej: 3001234567" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Dirección *</label>
+                            <input type="text" id="modalAddress" placeholder="Ej: Calle 123 #45-67" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Ciudad *</label>
+                            <input type="text" id="modalCity" placeholder="Ej: Bogotá" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Barrio / Comuna *</label>
+                            <input type="text" id="modalNeighborhood" placeholder="Ej: Chapinero" required>
+                        </div>
+                        <button type="submit" class="btn-dark modal-submit-btn">Confirmar pedido</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <script src="main.js"></script>
 </body>
 
 </html>
