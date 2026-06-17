@@ -254,35 +254,17 @@ function renderProductPacks(productId) {
 // RENDER VIDEO INFORMATIVO DEL PRODUCTO
 // ============================================
 function renderProductVideo(productId) {
-    // Ruta CORRECTA que funciona en el navegador
-    const videos = {
-        1: "/Medios/videos/royceVideo.mp4",
-        2: "/Medios/videos/biotinVideo.mp4",
-        3: "/Medios/videos/rankoVideo.mp4"
-    };
-
-    const videoSrc = videos[productId] || "";
-    if (!videoSrc) return;
-
+    // ⚠️ VIDEO TEMPORALMENTE OCULTO
     const videoContainer = document.getElementById('productVideoContainer');
     if (!videoContainer) return;
-
+    
+    // Ocultar el contenedor
+    videoContainer.style.display = 'none';
+    
+    // O también puedes poner un mensaje
     videoContainer.innerHTML = `
-        <div class="product-video-wrapper">
-            <video 
-                autoplay 
-                muted 
-                loop
-                playsinline
-                preload="metadata"
-                class="product-video"
-            >
-                <source src="${videoSrc}" type="video/mp4">
-                Tu navegador no soporta el elemento de video.
-            </video>
-            <div class="video-overlay">
-                <span class="video-badge">🎬 Información del producto</span>
-            </div>
+        <div style="text-align:center;padding:40px;color:#999;">
+            <p>🎬 Contenido en preparación</p>
         </div>
     `;
 }
