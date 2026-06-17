@@ -255,7 +255,6 @@ function renderProductPacks(productId) {
 // ============================================
 
 function renderProductVideo(productId) {
-    // Mapeo de videos por producto - CON RUTA ABSOLUTA
     const videos = {
         1: "/Medios/videos/royceVideo.mp4",
         2: "/Medios/videos/biotinVideo.mp4",
@@ -271,15 +270,16 @@ function renderProductVideo(productId) {
     videoContainer.innerHTML = `
         <div class="product-video-wrapper">
             <video 
-                src="${videoSrc}" 
                 autoplay 
                 loop 
                 muted 
                 playsinline
                 preload="auto"
                 class="product-video"
-                controls
-            ></video>
+            >
+                <source src="${videoSrc}" type="video/mp4">
+                Tu navegador no soporta el elemento de video.
+            </video>
             <div class="video-overlay">
                 <span class="video-badge">🎬 Información del producto</span>
             </div>
