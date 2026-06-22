@@ -2,10 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
+const axios = require('axios');
 require('dotenv').config();
-
-// ✅ Importar Brevo correctamente
-const brevo = require('@getbrevo/brevo');
 
 const app = express();
 
@@ -44,6 +42,43 @@ function guardarPedidoLocal(pedido) {
     console.log(`   Guardado en: pedidos.json\n`);
 }
 
+// ✅ Función para enviar email con Brevo usando Axios (más confiable)
+async function enviarEmailBrevo(destinatario, asunto, contenidoHtml) {
+    const apiKey = process.env.BREVO_API_KEY;
+    
+    if (!apiKey) {
+        console.log('❌ BREVO_API_KEY no configurada');
+        return false;
+    }
+
+    try {
+        const response = await axios({
+            method: 'POST',
+            url: 'https://api.brevo.com/v3/smtp/email',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'api-key': apiKey
+            },
+            data: {
+                sender: {
+                    name: 'MCD Shop',
+                    email: 'djmmar9@gmail.com'
+                },
+                to: [{ email: destinatario }],
+                subject: asunto,
+                htmlContent: contenidoHtml
+            }
+        });
+
+        console.log(`✅ Email enviado a ${destinatario}`);
+        return true;
+    } catch (error) {
+        console.log(`❌ Error al enviar email a ${destinatario}:`, error.response?.data?.message || error.message);
+        return false;
+    }
+}
+
 app.post('/api/pedidos', async (req, res) => {
     try {
         const { items, cliente, total } = req.body;
@@ -70,60 +105,44 @@ app.post('/api/pedidos', async (req, res) => {
 
         guardarPedidoLocal(pedido);
 
-        // ✅ Enviar email con la API de Brevo (CORRECTO)
-        try {
-            console.log('📧 Intentando enviar email con Brevo API...');
-            
-            // Crear instancia de la API
-            const apiInstance = new brevo.TransactionalEmailsApi();
-            
-            // Configurar API Key
-            apiInstance.setApiKey(brevo.TransactionalEmailsApi.ApiKeys.apiKey, process.env.BREVO_API_KEY);
+        // ✅ Enviar emails usando la función con Axios
+        const adminContent = `
+            <h2>¡Nuevo pedido!</h2>
+            <p><strong>Cliente:</strong> ${pedido.cliente.nombre}</p>
+            <p><strong>Email:</strong> ${pedido.cliente.email || 'No proporcionado'}</p>
+            <p><strong>Teléfono:</strong> ${pedido.cliente.telefono || 'N/A'}</p>
+            <p><strong>Dirección:</strong> ${pedido.cliente.direccion || 'N/A'}</p>
+            <p><strong>Ciudad:</strong> ${pedido.cliente.ciudad || 'N/A'}</p>
+            <p><strong>Barrio:</strong> ${pedido.cliente.barrio || 'N/A'}</p>
+            <h3>Productos:</h3>
+            <ul>${items.map(item => `<li>${item.nombre} x${item.cantidad} = $${(item.precio * item.cantidad).toFixed(2)} MXN</li>`).join('')}</ul>
+            <h3>Total: $${pedido.total.toFixed(2)} MXN</h3>
+            <p>📦 Pedido #${pedido.id}</p>
+        `;
 
-            // Crear el contenido del email para el admin
-            const adminEmail = new brevo.SendSmtpEmail();
-            adminEmail.subject = `🛍️ Nuevo pedido #${pedido.id}`;
-            adminEmail.sender = { name: "MCD Shop", email: "djmmar9@gmail.com" };
-            adminEmail.to = [{ email: "djmmar9@gmail.com" }];
-            adminEmail.htmlContent = `
-                <h2>¡Nuevo pedido!</h2>
-                <p><strong>Cliente:</strong> ${pedido.cliente.nombre}</p>
-                <p><strong>Email:</strong> ${pedido.cliente.email || 'No proporcionado'}</p>
-                <p><strong>Teléfono:</strong> ${pedido.cliente.telefono || 'N/A'}</p>
-                <p><strong>Dirección:</strong> ${pedido.cliente.direccion || 'N/A'}</p>
-                <h3>Productos:</h3>
+        // Enviar al admin
+        await enviarEmailBrevo(
+            'djmmar9@gmail.com',
+            `🛍️ Nuevo pedido #${pedido.id}`,
+            adminContent
+        );
+
+        // Enviar al cliente (si tiene email)
+        if (pedido.cliente.email) {
+            const customerContent = `
+                <h2>¡Gracias ${pedido.cliente.nombre}!</h2>
+                <p>Hemos recibido tu pedido #${pedido.id} y lo procesaremos pronto.</p>
+                <h3>Resumen de tu compra:</h3>
                 <ul>${items.map(item => `<li>${item.nombre} x${item.cantidad} = $${(item.precio * item.cantidad).toFixed(2)} MXN</li>`).join('')}</ul>
-                <h3>Total: $${pedido.total.toFixed(2)} MXN</h3>
+                <p><strong>Total: $${pedido.total.toFixed(2)} MXN</strong></p>
+                <p>¡Gracias por confiar en MCD Shop!</p>
             `;
-
-            // Enviar email al admin
-            await apiInstance.sendTransacEmail(adminEmail);
-            console.log('✅ Email al admin enviado');
-
-            // Enviar email al cliente (si tiene email)
-            if (pedido.cliente.email) {
-                const customerEmail = new brevo.SendSmtpEmail();
-                customerEmail.subject = `✅ Pedido #${pedido.id} recibido - MCD Shop`;
-                customerEmail.sender = { name: "MCD Shop", email: "djmmar9@gmail.com" };
-                customerEmail.to = [{ email: pedido.cliente.email }];
-                customerEmail.htmlContent = `
-                    <h2>¡Gracias ${pedido.cliente.nombre}!</h2>
-                    <p>Hemos recibido tu pedido #${pedido.id} y lo procesaremos pronto.</p>
-                    <h3>Resumen de tu compra:</h3>
-                    <ul>${items.map(item => `<li>${item.nombre} x${item.cantidad} = $${(item.precio * item.cantidad).toFixed(2)} MXN</li>`).join('')}</ul>
-                    <p><strong>Total: $${pedido.total.toFixed(2)} MXN</strong></p>
-                    <p>¡Gracias por confiar en MCD Shop!</p>
-                `;
-                await apiInstance.sendTransacEmail(customerEmail);
-                console.log('✅ Email al cliente enviado');
-            }
-
-        } catch (emailError) {
-            console.log('❌ Error al enviar email:', emailError.message);
-            if (emailError.response) {
-                console.log('📝 Respuesta del servidor:', JSON.stringify(emailError.response.body, null, 2));
-            }
-            console.log('   El pedido se guardó pero no se envió el email.');
+            
+            await enviarEmailBrevo(
+                pedido.cliente.email,
+                `✅ Pedido #${pedido.id} recibido - MCD Shop`,
+                customerContent
+            );
         }
 
         res.json({ 
