@@ -15,12 +15,13 @@ app.use(express.json());
 // Servir archivos estáticos
 app.use(express.static(__dirname));
 app.use('/Medios', express.static(path.join(__dirname, 'Medios')));
+app.use('/medios', express.static(path.join(__dirname, 'Medios'))); // ✅ También para minúscula
 
 // Productos
 const productos = [
-    { id: 1, nombre: "RoyceDerm Face cream", precio: 78.000 + "Envio Gratis", imagen: "/medios/Imagenes/royce.jpeg", color: "Silber" },
-    { id: 2, nombre: "Sumvx Hair Serum", precio: 329, imagen: "/medios/Imagenes/biotinrohs.jpeg", color: "Schwarz" },
-    { id: 3, nombre: "KL Ranko Cream", precio: 349, imagen: "/medios/Imagenes/rankomc.jpeg", color: "Gold" },
+    { id: 1, nombre: "RoyceDerm Face cream", precio: 78000, imagen: "/Medios/Imagenes/royce.jpeg", color: "Silber" },
+    { id: 2, nombre: "Biotin Hair Serum", precio: 72000, imagen: "/Medios/Imagenes/biotinrohs.jpeg", color: "Schwarz" },
+    { id: 3, nombre: "Ranko Moisturizing Cream", precio: 72000, imagen: "/Medios/Imagenes/rankomc.jpeg", color: "Gold" },
 ];
 
 // Endpoint: Listar productos
@@ -51,7 +52,8 @@ app.post('/api/pedidos', async (req, res) => {
     try {
         const { items, cliente, total } = req.body;
 
-        if (!items || !items.length || !cliente || !cliente.email) {
+        // ✅ Validación: email NO obligatorio
+        if (!items || !items.length || !cliente || !cliente.nombre) {
             return res.status(400).json({ error: 'Faltan datos del pedido' });
         }
 
@@ -60,9 +62,11 @@ app.post('/api/pedidos', async (req, res) => {
             items,
             cliente: {
                 nombre: cliente.nombre,
-                email: cliente.email,
+                email: cliente.email || '',  // ✅ Email opcional
                 telefono: cliente.telefono || '',
-                direccion: cliente.direccion || ''
+                direccion: cliente.direccion || '',
+                ciudad: cliente.ciudad || '',
+                barrio: cliente.barrio || ''
             },
             total: total || items.reduce((sum, item) => sum + (item.precio * item.cantidad), 0),
             estado: 'pendiente',
@@ -78,17 +82,25 @@ app.post('/api/pedidos', async (req, res) => {
             let apiKey = apiInstance.authentications['apiKey'];
             apiKey.apiKey = process.env.BREVO_API_KEY;
 
-            // Email para el admin
+            // ✅ Verificar que la API Key existe
+            if (!process.env.BREVO_API_KEY) {
+                console.log('⚠️ BREVO_API_KEY no configurada en variables de entorno');
+                throw new Error('BREVO_API_KEY no configurada');
+            }
+
+            // Email para el admin (siempre se envía)
             let adminEmail = new brevo.SendSmtpEmail();
             adminEmail.subject = `🛍️ Nuevo pedido #${pedido.id}`;
-            adminEmail.sender = { name: "DMJ Shop", email: "djmmar9@gmail.com" };
+            adminEmail.sender = { name: "MCD Shop", email: "djmmar9@gmail.com" };
             adminEmail.to = [{ email: "djmmar9@gmail.com" }];
             adminEmail.htmlContent = `
                 <h2>¡Nuevo pedido!</h2>
                 <p><strong>Cliente:</strong> ${pedido.cliente.nombre}</p>
-                <p><strong>Email:</strong> ${pedido.cliente.email}</p>
+                <p><strong>Email:</strong> ${pedido.cliente.email || 'No proporcionado'}</p>
                 <p><strong>Teléfono:</strong> ${pedido.cliente.telefono || 'N/A'}</p>
                 <p><strong>Dirección:</strong> ${pedido.cliente.direccion || 'N/A'}</p>
+                <p><strong>Ciudad:</strong> ${pedido.cliente.ciudad || 'N/A'}</p>
+                <p><strong>Barrio:</strong> ${pedido.cliente.barrio || 'N/A'}</p>
                 <h3>Productos:</h3>
                 <ul>${items.map(item => `<li>${item.nombre} x${item.cantidad} = $${(item.precio * item.cantidad).toFixed(2)} MXN</li>`).join('')}</ul>
                 <h3>Total: $${pedido.total.toFixed(2)} MXN</h3>
@@ -96,25 +108,30 @@ app.post('/api/pedidos', async (req, res) => {
             await apiInstance.sendTransacEmail(adminEmail);
             console.log('✅ Email al admin enviado');
 
-            // Email para el cliente
-            let customerEmail = new brevo.SendSmtpEmail();
-            customerEmail.subject = `✅ Pedido #${pedido.id} recibido - DMJ Shop`;
-            customerEmail.sender = { name: "DMJ Shop", email: "djmmar9@gmail.com" };
-            customerEmail.to = [{ email: pedido.cliente.email }];
-            customerEmail.htmlContent = `
-                <h2>¡Gracias ${pedido.cliente.nombre}!</h2>
-                <p>Hemos recibido tu pedido #${pedido.id} y lo procesaremos pronto.</p>
-                <h3>Resumen de tu compra:</h3>
-                <ul>${items.map(item => `<li>${item.nombre} x${item.cantidad} = $${(item.precio * item.cantidad).toFixed(2)} MXN</li>`).join('')}</ul>
-                <p><strong>Total: $${pedido.total.toFixed(2)} MXN</strong></p>
-                <p>¡Gracias por confiar en DMJ Shop!</p>
-            `;
-            await apiInstance.sendTransacEmail(customerEmail);
-            console.log('✅ Email al cliente enviado');
+            // ✅ Email para el cliente (solo si proporcionó email)
+            if (pedido.cliente.email) {
+                let customerEmail = new brevo.SendSmtpEmail();
+                customerEmail.subject = `✅ Pedido #${pedido.id} recibido - MCD Shop`;
+                customerEmail.sender = { name: "MCD Shop", email: "djmmar9@gmail.com" };
+                customerEmail.to = [{ email: pedido.cliente.email }];
+                customerEmail.htmlContent = `
+                    <h2>¡Gracias ${pedido.cliente.nombre}!</h2>
+                    <p>Hemos recibido tu pedido #${pedido.id} y lo procesaremos pronto.</p>
+                    <h3>Resumen de tu compra:</h3>
+                    <ul>${items.map(item => `<li>${item.nombre} x${item.cantidad} = $${(item.precio * item.cantidad).toFixed(2)} MXN</li>`).join('')}</ul>
+                    <p><strong>Total: $${pedido.total.toFixed(2)} MXN</strong></p>
+                    <p>¡Gracias por confiar en MCD Shop!</p>
+                `;
+                await apiInstance.sendTransacEmail(customerEmail);
+                console.log('✅ Email al cliente enviado');
+            } else {
+                console.log('⚠️ Cliente sin email - no se envió confirmación');
+            }
 
         } catch (brevoError) {
             console.log('❌ Error con Brevo:', brevoError.message);
             console.log('   El pedido se guardó pero no se envió el email.');
+            console.log('   Revisa que BREVO_API_KEY esté configurada correctamente en Render');
         }
 
         res.json({ 
@@ -134,10 +151,10 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`\n========================================`);
-    console.log(`✅ Servidor funcionando!`);
+    console.log(`✅ Servidor funcionando en puerto ${PORT}`);
     console.log(`📍 http://localhost:${PORT}`);
     console.log(`========================================\n`);
 });
