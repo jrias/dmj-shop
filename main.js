@@ -896,8 +896,8 @@ async function submitOrder(e) {
     const phone = document.getElementById('customerPhone').value;
     const address = document.getElementById('customerAddress').value;
 
-    if (!name || !email) {
-        showToast('Por favor completa nombre y email');
+    if (!name) {
+        showToast('Por favor completa nombre');
         return;
     }
 
@@ -1115,7 +1115,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const city = document.getElementById('modalCity').value;
             const neighborhood = document.getElementById('modalNeighborhood').value;
 
-            if (!phone || !name || !email || !address || !city || !neighborhood) {
+            if (!phone || !name || !address || !city || !neighborhood) {
                 showToast('Por favor completa todos los campos');
                 return;
             }
