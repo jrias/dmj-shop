@@ -42,7 +42,7 @@ function guardarPedidoLocal(pedido) {
     console.log(`   Guardado en: pedidos.json\n`);
 }
 
-// ✅ Función para enviar email con Brevo usando Axios (más confiable)
+// ✅ Función para enviar email con Brevo usando Axios
 async function enviarEmailBrevo(destinatario, asunto, contenidoHtml) {
     const apiKey = process.env.BREVO_API_KEY;
     
@@ -62,7 +62,7 @@ async function enviarEmailBrevo(destinatario, asunto, contenidoHtml) {
             },
             data: {
                 sender: {
-                    name: 'MCD Shop',
+                    name: 'DJM Shop',  // ✅ Cambiado a DJM
                     email: 'djmmar9@gmail.com'
                 },
                 to: [{ email: destinatario }],
@@ -135,12 +135,12 @@ app.post('/api/pedidos', async (req, res) => {
                 <h3>Resumen de tu compra:</h3>
                 <ul>${items.map(item => `<li>${item.nombre} x${item.cantidad} = $${(item.precio * item.cantidad).toFixed(2)} MXN</li>`).join('')}</ul>
                 <p><strong>Total: $${pedido.total.toFixed(2)} MXN</strong></p>
-                <p>¡Gracias por confiar en MCD Shop!</p>
+                <p>¡Gracias por confiar en <strong>DJM Shop</strong>!</p>  // ✅ Cambiado a DJM
             `;
             
             await enviarEmailBrevo(
                 pedido.cliente.email,
-                `✅ Pedido #${pedido.id} recibido - MCD Shop`,
+                `✅ Pedido #${pedido.id} recibido - DJM Shop`,  // ✅ Cambiado a DJM
                 customerContent
             );
         }
