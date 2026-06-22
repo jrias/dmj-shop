@@ -106,8 +106,7 @@ app.post('/api/pedidos', async (req, res) => {
                 <h3>Total: $${pedido.total.toFixed(2)} MXN</h3>
             `;
             await apiInstance.sendTransacEmail(adminEmail);
-            console.log('✅ Email al admin enviado');
-
+console.log('🔑 API Key presente:', process.env.BREVO_API_KEY ? '✅ Sí (longitud: ' + process.env.BREVO_API_KEY.length + ')' : '❌ No');
             // ✅ Email para el cliente (solo si proporcionó email)
             if (pedido.cliente.email) {
                 let customerEmail = new brevo.SendSmtpEmail();
