@@ -72,8 +72,7 @@ app.post('/api/pedidos', async (req, res) => {
         // ✅ Enviar email con Brevo
         try {
             let apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
-            let apiKey = apiInstance.authentications['apiKey'];
-            apiKey.apiKey = process.env.BREVO_API_KEY;
+            apiInstance.setApiKey(SibApiV3Sdk.TransactionalEmailsApi.ApiKeys.apiKey, process.env.BREVO_API_KEY);
 
             console.log('🔑 Intentando enviar email con Brevo...');
 
@@ -123,9 +122,9 @@ app.post('/api/pedidos', async (req, res) => {
             console.log('   El pedido se guardó pero no se envió el email.');
         }
 
-        res.json({ 
-            exito: true, 
-            pedidoId: pedido.id, 
+        res.json({
+            exito: true,
+            pedidoId: pedido.id,
             mensaje: 'Pedido recibido. Te contactaremos pronto.'
         });
 
