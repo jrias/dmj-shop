@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
-const SibApiV3Sdk = require('@getbrevo/brevo');
+const nodemailer = require('nodemailer');
 require('dotenv').config();
 
 const app = express();
@@ -23,7 +23,6 @@ const productos = [
     { id: 3, nombre: "Ranko Moisturizing Cream", precio: 72000, imagen: "/Medios/Imagenes/rankomc.jpeg", color: "Gold" },
 ];
 
-// Endpoint: Listar productos
 app.get('/api/productos', (req, res) => {
     res.json(productos);
 });
@@ -69,62 +68,68 @@ app.post('/api/pedidos', async (req, res) => {
 
         guardarPedidoLocal(pedido);
 
-        // ✅ Enviar email con Brevo
+        // ✅ Enviar email con SMTP de Brevo (más confiable)
         try {
-            let apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
-            apiInstance.setApiKey(SibApiV3Sdk.TransactionalEmailsApi.ApiKeys.apiKey, process.env.BREVO_API_KEY);
+            console.log('📧 Intentando enviar email con SMTP...');
 
-            console.log('🔑 Intentando enviar email con Brevo...');
+            // Configurar transportador SMTP de Brevo
+            const transporter = nodemailer.createTransport({
+                host: 'smtp-relay.brevo.com',
+                port: 587,
+                secure: false,
+                auth: {
+                    user: 'djmmar9@gmail.com',
+                    pass: process.env.BREVO_SMTP_KEY || process.env.BREVO_API_KEY
+                }
+            });
 
             // Email para el admin
-            let adminEmail = new SibApiV3Sdk.SendSmtpEmail();
-            adminEmail.subject = `🛍️ Nuevo pedido #${pedido.id}`;
-            adminEmail.sender = { name: "MCD Shop", email: "djmmar9@gmail.com" };
-            adminEmail.to = [{ email: "djmmar9@gmail.com" }];
-            adminEmail.htmlContent = `
-                <h2>¡Nuevo pedido!</h2>
-                <p><strong>Cliente:</strong> ${pedido.cliente.nombre}</p>
-                <p><strong>Email:</strong> ${pedido.cliente.email || 'No proporcionado'}</p>
-                <p><strong>Teléfono:</strong> ${pedido.cliente.telefono || 'N/A'}</p>
-                <p><strong>Dirección:</strong> ${pedido.cliente.direccion || 'N/A'}</p>
-                <h3>Productos:</h3>
-                <ul>${items.map(item => `<li>${item.nombre} x${item.cantidad} = $${(item.precio * item.cantidad).toFixed(2)} MXN</li>`).join('')}</ul>
-                <h3>Total: $${pedido.total.toFixed(2)} MXN</h3>
-            `;
-            await apiInstance.sendTransacEmail(adminEmail);
+            const adminMailOptions = {
+                from: '"MCD Shop" <djmmar9@gmail.com>',
+                to: 'djmmar9@gmail.com',
+                subject: `🛍️ Nuevo pedido #${pedido.id}`,
+                html: `
+                    <h2>¡Nuevo pedido!</h2>
+                    <p><strong>Cliente:</strong> ${pedido.cliente.nombre}</p>
+                    <p><strong>Email:</strong> ${pedido.cliente.email || 'No proporcionado'}</p>
+                    <p><strong>Teléfono:</strong> ${pedido.cliente.telefono || 'N/A'}</p>
+                    <p><strong>Dirección:</strong> ${pedido.cliente.direccion || 'N/A'}</p>
+                    <h3>Productos:</h3>
+                    <ul>${items.map(item => `<li>${item.nombre} x${item.cantidad} = $${(item.precio * item.cantidad).toFixed(2)} MXN</li>`).join('')}</ul>
+                    <h3>Total: $${pedido.total.toFixed(2)} MXN</h3>
+                `
+            };
+
+            await transporter.sendMail(adminMailOptions);
             console.log('✅ Email al admin enviado');
 
-            // Email para el cliente
+            // Email para el cliente (si tiene email)
             if (pedido.cliente.email) {
-                let customerEmail = new SibApiV3Sdk.SendSmtpEmail();
-                customerEmail.subject = `✅ Pedido #${pedido.id} recibido - MCD Shop`;
-                customerEmail.sender = { name: "MCD Shop", email: "djmmar9@gmail.com" };
-                customerEmail.to = [{ email: pedido.cliente.email }];
-                customerEmail.htmlContent = `
-                    <h2>¡Gracias ${pedido.cliente.nombre}!</h2>
-                    <p>Hemos recibido tu pedido #${pedido.id} y lo procesaremos pronto.</p>
-                    <h3>Resumen de tu compra:</h3>
-                    <ul>${items.map(item => `<li>${item.nombre} x${item.cantidad} = $${(item.precio * item.cantidad).toFixed(2)} MXN</li>`).join('')}</ul>
-                    <p><strong>Total: $${pedido.total.toFixed(2)} MXN</strong></p>
-                    <p>¡Gracias por confiar en MCD Shop!</p>
-                `;
-                await apiInstance.sendTransacEmail(customerEmail);
+                const customerMailOptions = {
+                    from: '"MCD Shop" <djmmar9@gmail.com>',
+                    to: pedido.cliente.email,
+                    subject: `✅ Pedido #${pedido.id} recibido - MCD Shop`,
+                    html: `
+                        <h2>¡Gracias ${pedido.cliente.nombre}!</h2>
+                        <p>Hemos recibido tu pedido #${pedido.id} y lo procesaremos pronto.</p>
+                        <h3>Resumen de tu compra:</h3>
+                        <ul>${items.map(item => `<li>${item.nombre} x${item.cantidad} = $${(item.precio * item.cantidad).toFixed(2)} MXN</li>`).join('')}</ul>
+                        <p><strong>Total: $${pedido.total.toFixed(2)} MXN</strong></p>
+                        <p>¡Gracias por confiar en MCD Shop!</p>
+                    `
+                };
+                await transporter.sendMail(customerMailOptions);
                 console.log('✅ Email al cliente enviado');
-            } else {
-                console.log('⚠️ Cliente sin email - no se envió confirmación');
             }
 
-        } catch (brevoError) {
-            console.log('❌ Error con Brevo:', brevoError.message);
-            if (brevoError.response) {
-                console.log('📝 Detalles del error:', brevoError.response.body);
-            }
+        } catch (emailError) {
+            console.log('❌ Error al enviar email:', emailError.message);
             console.log('   El pedido se guardó pero no se envió el email.');
         }
 
-        res.json({
-            exito: true,
-            pedidoId: pedido.id,
+        res.json({ 
+            exito: true, 
+            pedidoId: pedido.id, 
             mensaje: 'Pedido recibido. Te contactaremos pronto.'
         });
 
