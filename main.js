@@ -324,7 +324,6 @@ function renderProductPacks(productId) {
         <span class="savings-percent">${pack.savingsPercent}% dto.</span>
     </div>
 ` : ''}
-                        <span class="pack-hint">↕ Seleccionar</span>
                     </div>
                 `).join('')}
                 <div class="pack-family" onclick="addPackWithConfirm(${productData.id}, null, '${productData.family.name}')">
@@ -394,7 +393,7 @@ function renderPacks() {
         <span class="savings-percent">${pack.savingsPercent}% dto.</span>
     </div>
 ` : ''}
-                        <span class="pack-hint">↕ Seleccionar</span>
+                        
                     </div>
                 `).join('')}
                 <div class="pack-family" onclick="addPackWithConfirm(${product.id}, null, '${product.family.name}')">

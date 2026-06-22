@@ -484,7 +484,7 @@ textarea,
 }
 
 /* ============================================
-   8. MODALES
+   8. MODALES GENERALES
    ============================================ */
 
 .modal {
@@ -530,7 +530,7 @@ textarea,
 }
 
 /* ============================================
-   MODAL DE CONFIRMACIÓN PARA CAMBIO DE PACK
+   9. MODAL DE CONFIRMACIÓN PARA CAMBIO DE PACK
    ============================================ */
 
 .confirm-modal-content {
@@ -567,8 +567,9 @@ textarea,
 .confirm-buttons .btn-dark {
     padding: 10px 24px;
 }
+
 /* ============================================
-   9. FORMULARIOS
+   10. FORMULARIOS
    ============================================ */
 
 .form-group {
@@ -623,7 +624,7 @@ textarea,
 }
 
 /* ============================================
-   10. SUCCESS MODAL
+   11. SUCCESS MODAL
    ============================================ */
 
 .success-content {
@@ -650,7 +651,7 @@ textarea,
 }
 
 /* ============================================
-   11. TOAST NOTIFICACIONES
+   12. TOAST NOTIFICACIONES
    ============================================ */
 
 .toast {
@@ -674,7 +675,7 @@ textarea,
 }
 
 /* ============================================
-   12. FOOTER
+   13. FOOTER
    ============================================ */
 
 .footer {
@@ -691,7 +692,7 @@ textarea,
 }
 
 /* ============================================
-   13. PÁGINA SOBRE NOSOTROS
+   14. PÁGINA SOBRE NOSOTROS
    ============================================ */
 
 .about-section {
@@ -791,7 +792,7 @@ textarea,
 }
 
 /* ============================================
-   14. PÁGINA DE CONTACTO
+   15. PÁGINA DE CONTACTO
    ============================================ */
 
 .contact-section {
@@ -955,7 +956,7 @@ textarea,
 }
 
 /* ============================================
-   15. CART MODAL EMERGENTE
+   16. CART MODAL EMERGENTE
    ============================================ */
 
 .cart-modal {
@@ -1035,14 +1036,6 @@ textarea,
     padding: 28px;
 }
 
-.cart-modal-subtitle {
-    color: #666;
-    font-size: 1rem;
-    font-weight: 500;
-    margin-bottom: 24px;
-    text-align: center;
-}
-
 .cart-modal-item {
     display: flex;
     justify-content: space-between;
@@ -1086,11 +1079,6 @@ textarea,
     align-items: center;
     flex-wrap: wrap;
     gap: 6px;
-}
-
-.cart-modal-item-detail {
-    color: #999;
-    font-size: 0.9rem;
 }
 
 .cart-modal-item-quantity {
@@ -1297,72 +1285,6 @@ textarea,
 }
 
 /* ============================================
-   16. SCROLLBARS VISIBLES
-   ============================================ */
-
-html {
-    overflow-y: scroll;
-}
-
-::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-}
-
-::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb {
-    background: #ccc;
-    border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: #999;
-}
-
-* {
-    scrollbar-width: thin;
-    scrollbar-color: #ccc #f1f1f1;
-}
-
-.cart-modal-content::-webkit-scrollbar,
-.cart-sidebar-content::-webkit-scrollbar,
-.modal-content::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-}
-
-.cart-modal-content::-webkit-scrollbar-track,
-.cart-sidebar-content::-webkit-scrollbar-track,
-.modal-content::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 10px;
-}
-
-.cart-modal-content::-webkit-scrollbar-thumb,
-.cart-sidebar-content::-webkit-scrollbar-thumb,
-.modal-content::-webkit-scrollbar-thumb {
-    background: #ccc;
-    border-radius: 10px;
-}
-
-.cart-modal-content::-webkit-scrollbar-thumb:hover,
-.cart-sidebar-content::-webkit-scrollbar-thumb:hover,
-.modal-content::-webkit-scrollbar-thumb:hover {
-    background: #999;
-}
-
-.cart-modal-content,
-.cart-sidebar-content,
-.modal-content {
-    scrollbar-width: thin;
-    scrollbar-color: #ccc #f1f1f1;
-}
-
-/* ============================================
    17. CART SIDEBAR - RESUMEN DE PRECIOS
    ============================================ */
 
@@ -1430,7 +1352,7 @@ html {
     background: #fafaf8;
     border-radius: 32px;
     margin: 40px 0;
-    overflow: visible; /* ✅ Evita que los elementos se corten */
+    overflow: visible;
 }
 
 .packs-section h2 {
@@ -1455,7 +1377,7 @@ html {
     gap: 30px;
     max-width: 1200px;
     margin: 0 auto;
-    align-items: start; /* ✅ Alinear al inicio */
+    align-items: start;
 }
 
 .pack-card {
@@ -1464,13 +1386,11 @@ html {
     overflow: hidden;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
     border: 1px solid #f0f0f0;
-    transition: all 0.3s ease;
+    transition: box-shadow 0.3s ease;
 }
 
-
 .pack-card:hover {
-    transform: translateY(-4px); /* ✅ Reducir el movimiento */
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
 }
 
 .pack-card-header {
@@ -1513,27 +1433,52 @@ html {
     padding: 20px 24px;
 }
 
-.pack-option {
-    border-left: 3px solid transparent;
+.pack-shipping-badge {
+    display: inline-block;
+    background: #00B894;
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 3px 12px;
+    border-radius: 20px;
+    margin-top: 4px;
+}
+
+.pack-card-footer {
+    padding: 16px 24px 20px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.pack-card-footer button {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #00B894, #00CEC9);
+    color: white;
+    border: none;
+    border-radius: 40px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
     transition: all 0.3s ease;
+}
+
+.pack-card-footer button:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 15px rgba(0, 206, 201, 0.4);
+}
+
+/* ============================================
+   19. PACK OPTIONS - BASE Y JERARQUÍA
+   ============================================ */
+
+.pack-option {
+    transition: background 0.3s ease, border-color 0.3s ease;
     position: relative;
     padding: 12px 14px;
     border-bottom: 1px solid #f5f5f5;
     border-radius: 8px;
     border: 2px solid transparent;
     cursor: pointer;
-    /* ✅ Mantener el flujo del layout */
-}
-
-.pack-option:hover {
-    background: #f0f7ff;
-    transform: translateX(6px);
-    border-color: #4A9EC7;
-    box-shadow: 0 4px 15px rgba(74, 158, 199, 0.15);
-}
-
-.pack-option:active {
-    transform: scale(0.98);
 }
 
 .pack-option:last-child {
@@ -1583,6 +1528,54 @@ html {
     line-height: 1.4;
 }
 
+
+/* NIVEL 1: Tratamiento Básico - color azul suave */
+
+.pack-option.basico:hover {
+    background: #e8f4f8;
+    border-color: #2D6B8A;
+}
+
+/* NIVEL 2: Pack Dúo - color azul más intenso (sube de nivel) */
+
+.pack-option.duo:hover {
+    background: #d4ecf5;
+    border-color: #1F5A78;
+}
+
+.pack-option.basico:hover {
+    background: #e8f4f8;
+    border-color: #2D6B8A;
+}
+
+@keyframes fadeInHint {
+    from {
+        opacity: 0;
+        transform: translateX(-5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* NIVEL 2: Pack Dúo (Intermedio) - SIN transform */
+.pack-option.duo:hover {
+    background: #f0f7ff;
+    border-color: #6BB8D9;
+}
+
+.pack-option.duo:hover {
+    background: #d4ecf5;
+    border-color: #1F5A78;
+}
+
+
+/* ============================================
+   20. PACK SAVINGS
+   ============================================ */
+
 .pack-savings {
     display: flex;
     justify-content: space-between;
@@ -1616,42 +1609,8 @@ html {
     border-radius: 12px;
 }
 
-.pack-shipping-badge {
-    display: inline-block;
-    background: #00B894;
-    color: white;
-    font-size: 0.7rem;
-    font-weight: 600;
-    padding: 3px 12px;
-    border-radius: 20px;
-    margin-top: 4px;
-}
-
-.pack-card-footer {
-    padding: 16px 24px 20px;
-    border-top: 1px solid #f0f0f0;
-}
-
-.pack-card-footer button {
-    width: 100%;
-    padding: 14px;
-    background: linear-gradient(135deg, #00B894, #00CEC9);
-    color: white;
-    border: none;
-    border-radius: 40px;
-    font-weight: 600;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.pack-card-footer button:hover {
-    transform: scale(1.02);
-    box-shadow: 0 4px 15px rgba(0, 206, 201, 0.4);
-}
-
 /* ============================================
-   19. PACK FAMILIAR - EFECTO PREMIUM
+   21. PACK FAMILIAR - EFECTO PREMIUM
    ============================================ */
 
 .pack-family {
@@ -1665,7 +1624,16 @@ html {
     transition: all 0.4s ease;
     position: relative;
     overflow: visible;
-    /* ✅ Eliminar transformaciones que afectan el layout */
+}
+
+.pack-family:hover {
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+    border-color: #FFD700;
+    background: linear-gradient(135deg, #fffef5, #fff8e7);
+}
+
+.pack-family:active {
+    transition: transform 0.1s ease;
 }
 
 .pack-family .family-name {
@@ -1673,6 +1641,10 @@ html {
     font-size: 1.1rem;
     color: #333;
     transition: color 0.4s ease;
+}
+
+.pack-family:hover .family-name {
+    color: #FFD700;
 }
 
 .pack-family .family-price {
@@ -1683,15 +1655,27 @@ html {
     transition: color 0.4s ease;
 }
 
+.pack-family:hover .family-price {
+    color: #000;
+}
+
 .pack-family .family-desc {
     font-size: 0.85rem;
     color: #888;
     transition: color 0.4s ease;
 }
 
+.pack-family:hover .family-desc {
+    color: #555;
+}
+
 .pack-family .family-savings .savings-amount {
     color: #888;
     transition: color 0.4s ease;
+}
+
+.pack-family:hover .family-savings .savings-amount {
+    color: #ff4444;
 }
 
 .pack-family .family-savings .savings-percent {
@@ -1700,29 +1684,6 @@ html {
     padding: 2px 12px;
     border-radius: 12px;
     transition: all 0.4s ease;
-}
-
-.pack-family:hover {
-    transform: translateY(-4px); /* ✅ Solo movimiento vertical, sin scale */
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
-    border-color: #FFD700;
-    background: linear-gradient(135deg, #fffef5, #fff8e7);
-}
-
-.pack-family:hover .family-name {
-    color: #FFD700;
-}
-
-.pack-family:hover .family-price {
-    color: #000;
-}
-
-.pack-family:hover .family-desc {
-    color: #555;
-}
-
-.pack-family:hover .family-savings .savings-amount {
-    color: #ff4444;
 }
 
 .pack-family:hover .family-savings .savings-percent {
@@ -1737,7 +1698,7 @@ html {
     left: -50%;
     width: 200%;
     height: 200%;
-    background: radial-gradient(circle, rgba(255, 215, 0, 0.1) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(255, 215, 0, 0.08) 0%, transparent 70%);
     opacity: 0;
     transition: opacity 0.6s ease;
     pointer-events: none;
@@ -1751,9 +1712,9 @@ html {
     display: inline-block;
     background: linear-gradient(135deg, #FFD700, #FFA500);
     color: white;
-    font-size: 0.55rem;
+    font-size: 0.6rem;
     font-weight: 700;
-    padding: 2px 12px;
+    padding: 3px 14px;
     border-radius: 20px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -1774,7 +1735,6 @@ html {
     }
 }
 
-/* Etiqueta "BEST SELLER" - AJUSTADA */
 .pack-family .family-tag {
     position: absolute;
     top: -10px;
@@ -1790,7 +1750,7 @@ html {
     box-shadow: 0 2px 10px rgba(255, 68, 68, 0.3);
     opacity: 0;
     transform: scale(0.8) rotate(-3deg);
-    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: all 0.5s ease;
     white-space: nowrap;
     z-index: 10;
 }
@@ -1800,33 +1760,18 @@ html {
     transform: scale(1) rotate(0deg);
 }
 
-/* Badge "MEJOR OPCIÓN" - AJUSTADO */
-.pack-family .family-badge {
-    display: inline-block;
-    background: linear-gradient(135deg, #FFD700, #FFA500);
-    color: white;
-    font-size: 0.6rem;
-    font-weight: 700;
-    padding: 3px 14px;
-    border-radius: 20px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 6px;
-    box-shadow: 0 2px 10px rgba(255, 215, 0, 0.3);
-    animation: badgePulse 2s ease-in-out infinite;
-}
-
 .pack-family .family-click-hint {
     display: block;
-    font-size: 0.65rem;
+    font-size: 0.6rem;
     color: #ccc;
     margin-top: 6px;
     transition: all 0.4s ease;
+    letter-spacing: 0.5px;
 }
 
 .pack-family:hover .family-click-hint {
     color: #FFD700;
-    letter-spacing: 1px;
+    letter-spacing: 1.5px;
 }
 
 .pack-family:active {
@@ -1861,7 +1806,7 @@ html {
 }
 
 /* ============================================
-   20. PACKS - EFECTOS DE SELECCIÓN
+   22. PACKS - EFECTOS DE SELECCIÓN
    ============================================ */
 
 .pack-option.selected,
@@ -1875,11 +1820,11 @@ html {
     }
 
     30% {
-        transform: scale(0.97);
+        transform: scale(0.98);
     }
 
     60% {
-        transform: scale(1.02);
+        transform: scale(1.01);
     }
 
     100% {
@@ -1903,105 +1848,7 @@ html {
 }
 
 /* ============================================
-   21. PACKS - JERARQUÍA DE ANIMACIONES
-   ============================================ */
-
-/* ESTILOS BASE - Se aplican a todos los packs */
-.pack-option {
-    border-left: 3px solid transparent;
-    transition: all 0.3s ease;
-    position: relative;
-    padding: 12px 14px;
-    border-bottom: 1px solid #f5f5f5;
-    border-radius: 8px;
-    border: 2px solid transparent;
-    cursor: pointer;
-}
-
-.pack-option:last-child {
-    border-bottom: none;
-}
-
-.pack-option .pack-hint {
-    display: none;
-    font-size: 0.55rem;
-    margin-left: 8px;
-    font-weight: 500;
-}
-
-/* ========== NIVEL 1: TRATAMIENTO BÁSICO (Sutil) ========== */
-.pack-option.basico:hover {
-    background: #f8fafc;
-    transform: translateX(4px); /* ✅ Solo movimiento horizontal */
-    border-color: #4A9EC7;
-}
-
-.pack-option.basico:hover .pack-hint {
-    display: inline-block;
-    color: #4A9EC7;
-    animation: fadeInHint 0.3s ease;
-}
-
-@keyframes fadeInHint {
-    from {
-        opacity: 0;
-        transform: translateX(-5px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-/* ========== NIVEL 2: PACK DÚO (Intermedio) ========== */
-.pack-option.duo:hover {
-    background: #f0f7ff;
-    transform: translateX(8px); /* ✅ Solo movimiento horizontal */
-    border-color: #6BB8D9;
-    box-shadow: 0 4px 15px rgba(74, 158, 199, 0.12);
-}
-
-.pack-option.duo:hover .pack-hint {
-    display: inline-block;
-    color: #4A9EC7;
-    font-weight: 600;
-    font-size: 0.6rem;
-    animation: slideHint 0.4s ease;
-}
-
-.pack-option.duo::after {
-    content: "→";
-    position: absolute;
-    right: 14px;
-    top: 50%;
-    transform: translateY(-50%) translateX(10px);
-    font-size: 1rem;
-    color: #4A9EC7;
-    opacity: 0;
-    transition: all 0.4s ease;
-}
-
-.pack-option.duo:hover::after {
-    opacity: 1;
-    transform: translateY(-50%) translateX(0);
-}
-
-@keyframes slideHint {
-    from {
-        opacity: 0;
-        transform: translateX(-10px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-
-/* ============================================
-   22. PACKS + VIDEO - DISEÑO HORIZONTAL
+   23. PACKS + VIDEO - DISEÑO HORIZONTAL
    ============================================ */
 
 .packs-section .packs-video-grid {
@@ -2072,7 +1919,29 @@ html {
 }
 
 /* ============================================
-   23. PRODUCT DETAIL PAGE
+   24. HOME - PACKS GRID CORRECTO
+   ============================================ */
+
+.home-packs .packs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.home-packs .packs-grid .pack-card {
+    margin: 0;
+}
+
+.packs-section:not(.home-packs) .packs-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+}
+
+/* ============================================
+   25. PRODUCT DETAIL PAGE
    ============================================ */
 
 .product-detail-section {
@@ -2150,29 +2019,73 @@ html {
 }
 
 /* ============================================
-   24. HOME - PACKS GRID CORRECTO
+   26. SCROLLBARS VISIBLES
    ============================================ */
 
-.home-packs .packs-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-    gap: 30px;
-    max-width: 1200px;
-    margin: 0 auto;
+html {
+    overflow-y: scroll;
 }
 
-.home-packs .packs-grid .pack-card {
-    margin: 0;
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
 }
 
-.packs-section:not(.home-packs) .packs-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 0;
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #999;
+}
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #ccc #f1f1f1;
+}
+
+.cart-modal-content::-webkit-scrollbar,
+.cart-sidebar-content::-webkit-scrollbar,
+.modal-content::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+.cart-modal-content::-webkit-scrollbar-track,
+.cart-sidebar-content::-webkit-scrollbar-track,
+.modal-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.cart-modal-content::-webkit-scrollbar-thumb,
+.cart-sidebar-content::-webkit-scrollbar-thumb,
+.modal-content::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
+}
+
+.cart-modal-content::-webkit-scrollbar-thumb:hover,
+.cart-sidebar-content::-webkit-scrollbar-thumb:hover,
+.modal-content::-webkit-scrollbar-thumb:hover {
+    background: #999;
+}
+
+.cart-modal-content,
+.cart-sidebar-content,
+.modal-content {
+    scrollbar-width: thin;
+    scrollbar-color: #ccc #f1f1f1;
 }
 
 /* ============================================
-   25. RESPONSIVE (MEDIA QUERIES)
+   27. RESPONSIVE (MEDIA QUERIES)
    ============================================ */
 
 @media (max-width: 992px) {
