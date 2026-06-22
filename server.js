@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
-const brevo = require('@getbrevo/brevo');
+const SibApiV3Sdk = require('@getbrevo/brevo');
 require('dotenv').config();
 
 const app = express();
@@ -16,9 +16,6 @@ app.use(express.static(__dirname));
 app.use('/Medios', express.static(path.join(__dirname, 'Medios')));
 app.use('/medios', express.static(path.join(__dirname, 'Medios')));
 
-// Crear instancia de Brevo UNA VEZ
-const apiInstance = new brevo.TransactionalEmailsApi();
-
 // Productos
 const productos = [
     { id: 1, nombre: "RoyceDerm Face cream", precio: 78000, imagen: "/Medios/Imagenes/royce.jpeg", color: "Silber" },
@@ -31,16 +28,13 @@ app.get('/api/productos', (req, res) => {
     res.json(productos);
 });
 
-// Guardar pedidos en archivo local
 function guardarPedidoLocal(pedido) {
     const pedidosFile = path.join(__dirname, 'pedidos.json');
     let pedidos = [];
-    
     if (fs.existsSync(pedidosFile)) {
         const data = fs.readFileSync(pedidosFile);
         pedidos = JSON.parse(data);
     }
-    
     pedidos.push(pedido);
     fs.writeFileSync(pedidosFile, JSON.stringify(pedidos, null, 2));
     console.log(`\n📦 NUEVO PEDIDO #${pedido.id}`);
@@ -49,7 +43,6 @@ function guardarPedidoLocal(pedido) {
     console.log(`   Guardado en: pedidos.json\n`);
 }
 
-// Endpoint: Crear pedido
 app.post('/api/pedidos', async (req, res) => {
     try {
         const { items, cliente, total } = req.body;
@@ -76,13 +69,16 @@ app.post('/api/pedidos', async (req, res) => {
 
         guardarPedidoLocal(pedido);
 
-        // Configuración de Brevo para emails
+        // ✅ Enviar email con Brevo
         try {
-            // Configurar la API Key
-            apiInstance.setApiKey(brevo.TransactionalEmailsApi.ApiKeys.apiKey, process.env.BREVO_API_KEY);
+            let apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+            let apiKey = apiInstance.authentications['apiKey'];
+            apiKey.apiKey = process.env.BREVO_API_KEY;
+
+            console.log('🔑 Intentando enviar email con Brevo...');
 
             // Email para el admin
-            let adminEmail = new brevo.SendSmtpEmail();
+            let adminEmail = new SibApiV3Sdk.SendSmtpEmail();
             adminEmail.subject = `🛍️ Nuevo pedido #${pedido.id}`;
             adminEmail.sender = { name: "MCD Shop", email: "djmmar9@gmail.com" };
             adminEmail.to = [{ email: "djmmar9@gmail.com" }];
@@ -101,7 +97,7 @@ app.post('/api/pedidos', async (req, res) => {
 
             // Email para el cliente
             if (pedido.cliente.email) {
-                let customerEmail = new brevo.SendSmtpEmail();
+                let customerEmail = new SibApiV3Sdk.SendSmtpEmail();
                 customerEmail.subject = `✅ Pedido #${pedido.id} recibido - MCD Shop`;
                 customerEmail.sender = { name: "MCD Shop", email: "djmmar9@gmail.com" };
                 customerEmail.to = [{ email: pedido.cliente.email }];
@@ -115,10 +111,15 @@ app.post('/api/pedidos', async (req, res) => {
                 `;
                 await apiInstance.sendTransacEmail(customerEmail);
                 console.log('✅ Email al cliente enviado');
+            } else {
+                console.log('⚠️ Cliente sin email - no se envió confirmación');
             }
 
         } catch (brevoError) {
             console.log('❌ Error con Brevo:', brevoError.message);
+            if (brevoError.response) {
+                console.log('📝 Detalles del error:', brevoError.response.body);
+            }
             console.log('   El pedido se guardó pero no se envió el email.');
         }
 
@@ -134,7 +135,6 @@ app.post('/api/pedidos', async (req, res) => {
     }
 });
 
-// Ruta principal
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
