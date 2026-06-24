@@ -190,16 +190,16 @@ function closeConfirmModal() {
 function addPackWithConfirm(productId, packIndex, packName) {
     const product = packsData.find(p => p.id === productId);
     if (!product) return;
-    
+
     let newItemId;
     if (packIndex !== undefined && packIndex !== null) {
         newItemId = `${productId}-${packIndex}`;
     } else {
         newItemId = `${productId}-family`;
     }
-    
+
     const existingItem = cart.find(item => item.id === newItemId);
-    
+
     if (existingItem) {
         showToast(`Ya tienes ${packName} en tu carrito. Se ha aumentado la cantidad.`);
         if (packIndex !== undefined && packIndex !== null) {
@@ -209,11 +209,11 @@ function addPackWithConfirm(productId, packIndex, packName) {
         }
         return;
     }
-    
+
     const hasOtherPacks = cart.some(item => {
         return (item.id.startsWith(`${productId}-`) || item.id === `${productId}`) && item.id !== newItemId;
     });
-    
+
     let newPackFullName = packName;
     if (packIndex !== undefined && packIndex !== null) {
         const pack = product.packs[packIndex];
@@ -221,7 +221,7 @@ function addPackWithConfirm(productId, packIndex, packName) {
     } else {
         newPackFullName = `${product.name} - ${product.family.name}`;
     }
-    
+
     if (hasOtherPacks) {
         openConfirmModal(product.name, newPackFullName, productId, packIndex, packIndex === null);
     } else {
@@ -542,15 +542,26 @@ function addToCart(productId) {
         });
     }
 
-    // ✅ Evento de Meta Pixel - AddToCart
+    // ✅ Evento de Meta Pixel - Purchase (con nombres de productos)
     if (typeof fbq !== 'undefined') {
-        fbq('track', 'AddToCart', {
-            content_name: product.name,
-            content_ids: [productId],
+        // Crear un array con los nombres de los productos
+        const productNames = items.map(item => item.nombre).join(', ');
+
+        fbq('track', 'Purchase', {
+            value: total,
+            currency: 'COP',
+            content_ids: items.map(item => item.id),
+            content_name: productNames,  // ✅ Nombres de los productos
             content_type: 'product',
-            value: product.price,
-            currency: 'MXN'
+            num_items: items.length,
+            contents: items.map(item => ({
+                id: item.id,
+                quantity: item.cantidad,
+                item_price: item.precio,
+                product_name: item.nombre
+            }))
         });
+        console.log('📊 Meta Pixel: Purchase -', productNames);
     }
 
     saveCart();
@@ -884,13 +895,13 @@ function openCheckout() {
     }
     closeCart();
     openCartModal();
-    
+
     // ✅ Evento de Meta Pixel - InitiateCheckout
     if (typeof fbq !== 'undefined') {
         const total = cart.reduce((sum, i) => sum + (i.price * (i.quantity || 1)), 0);
         fbq('track', 'InitiateCheckout', {
             value: total,
-            currency: 'MXN',
+            currency: 'COP',
             num_items: cart.length
         });
     }
@@ -933,6 +944,33 @@ async function submitOrder(e) {
         });
         const result = await res.json();
         if (res.ok && result.exito) {
+            // ✅ Evento de Meta Pixel - Purchase (compra completada)
+            if (typeof fbq !== 'undefined') {
+                const items = cart.map(i => ({
+                    id: i.id,
+                    nombre: i.name,
+                    precio: i.price,
+                    cantidad: i.quantity || 1
+                }));
+                const productNames = items.map(item => item.nombre).join(', ');
+
+                fbq('track', 'Purchase', {
+                    value: orderData.total,
+                    currency: 'COP',
+                    content_ids: items.map(item => item.id),
+                    content_name: productNames,
+                    content_type: 'product',
+                    num_items: items.length,
+                    contents: items.map(item => ({
+                        id: item.id,
+                        quantity: item.cantidad,
+                        item_price: item.precio,
+                        product_name: item.nombre
+                    }))
+                });
+                console.log('📊 Meta Pixel: Purchase -', productNames);
+            }
+
             cart = [];
             saveCart();
             updateCartDisplay();
@@ -980,15 +1018,25 @@ async function submitOrderModal(phone, name, email, address, city, neighborhood)
         if (response.ok && result.exito) {
             // ✅ Evento de Meta Pixel - Purchase
             if (typeof fbq !== 'undefined') {
+                const productNames = items.map(item => item.nombre).join(', ');
+                
                 fbq('track', 'Purchase', {
                     value: total,
-                    currency: 'MXN',
+                    currency: 'COP',
                     content_ids: items.map(item => item.id),
+                    content_name: productNames,
                     content_type: 'product',
-                    num_items: items.length
+                    num_items: items.length,
+                    contents: items.map(item => ({
+                        id: item.id,
+                        quantity: item.cantidad,
+                        item_price: item.precio,
+                        product_name: item.nombre
+                    }))
                 });
+                console.log('📊 Meta Pixel: Purchase -', productNames);
             }
-            
+
             cart = [];
             saveCart();
             updateCartDisplay();

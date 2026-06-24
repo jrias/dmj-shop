@@ -38,7 +38,7 @@ function guardarPedidoLocal(pedido) {
     fs.writeFileSync(pedidosFile, JSON.stringify(pedidos, null, 2));
     console.log(`\n📦 NUEVO PEDIDO #${pedido.id}`);
     console.log(`   Cliente: ${pedido.cliente.nombre} (${pedido.cliente.email || 'sin email'})`);
-    console.log(`   Total: $${pedido.total.toFixed(2)} MXN`);
+    console.log(`   Total: $${pedido.total.toFixed(2)} COP`);
     console.log(`   Guardado en: pedidos.json\n`);
 }
 
@@ -115,8 +115,8 @@ app.post('/api/pedidos', async (req, res) => {
             <p><strong>Ciudad:</strong> ${pedido.cliente.ciudad || 'N/A'}</p>
             <p><strong>Barrio:</strong> ${pedido.cliente.barrio || 'N/A'}</p>
             <h3>Productos:</h3>
-            <ul>${items.map(item => `<li>${item.nombre} x${item.cantidad} = $${(item.precio * item.cantidad).toFixed(2)} MXN</li>`).join('')}</ul>
-            <h3>Total: $${pedido.total.toFixed(2)} MXN</h3>
+            <ul>${items.map(item => `<li>${item.nombre} x${item.cantidad} = $${(item.precio * item.cantidad).toFixed(2)} COP</li>`).join('')}</ul>
+            <h3>Total: $${pedido.total.toFixed(2)} COP</h3>
             <p>📦 Pedido #${pedido.id}</p>
         `;
 
@@ -133,8 +133,8 @@ app.post('/api/pedidos', async (req, res) => {
                 <h2>¡Gracias ${pedido.cliente.nombre}!</h2>
                 <p>Hemos recibido tu pedido #${pedido.id} y lo procesaremos pronto.</p>
                 <h3>Resumen de tu compra:</h3>
-                <ul>${items.map(item => `<li>${item.nombre} x${item.cantidad} = $${(item.precio * item.cantidad).toFixed(2)} MXN</li>`).join('')}</ul>
-                <p><strong>Total: $${pedido.total.toFixed(2)} MXN</strong></p>
+                <ul>${items.map(item => `<li>${item.nombre} x${item.cantidad} = $${(item.precio * item.cantidad).toFixed(2)} COP</li>`).join('')}</ul>
+                <p><strong>Total: $${pedido.total.toFixed(2)} COP</strong></p>
                 <p>¡Gracias por confiar en <strong>DJM Shop</strong>!</p>  // ✅ Cambiado a DJM
             `;
             

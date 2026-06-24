@@ -30,7 +30,7 @@ function trackAddToCart(product) {
             content_ids: [product.id],
             content_type: 'product',
             value: product.price,
-            currency: 'MXN'
+            currency: 'COP'
         });
         console.log('📊 Meta Pixel: AddToCart -', product.name);
     }
@@ -40,7 +40,7 @@ function trackInitiateCheckout(total, items) {
     if (typeof fbq !== 'undefined') {
         fbq('track', 'InitiateCheckout', {
             value: total,
-            currency: 'MXN',
+            currency: 'COP',
             num_items: items.length
         });
         console.log('📊 Meta Pixel: InitiateCheckout');
@@ -51,7 +51,7 @@ function trackPurchase(orderData) {
     if (typeof fbq !== 'undefined') {
         fbq('track', 'Purchase', {
             value: orderData.total,
-            currency: 'MXN',
+            currency: 'COP',
             content_ids: orderData.items.map(item => item.id),
             content_type: 'product',
             num_items: orderData.items.length
