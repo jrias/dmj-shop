@@ -984,7 +984,6 @@ async function submitOrder(e) {
         showToast('Error de conexión');
     }
 }
-
 async function submitOrderModal(phone, name, email, address, city, neighborhood) {
     const fullName = name;
     const items = cart.map(item => ({
@@ -1008,6 +1007,8 @@ async function submitOrderModal(phone, name, email, address, city, neighborhood)
         total: total
     };
 
+    console.log('📦 Enviando pedido...', orderData);
+
     try {
         const response = await fetch('/api/pedidos', {
             method: 'POST',
@@ -1015,11 +1016,17 @@ async function submitOrderModal(phone, name, email, address, city, neighborhood)
             body: JSON.stringify(orderData)
         });
         const result = await response.json();
+        console.log('📦 Respuesta del servidor:', result);
+
         if (response.ok && result.exito) {
+            console.log('✅ Pedido exitoso! ID:', result.pedidoId);
+
             // ✅ Evento de Meta Pixel - Purchase
             if (typeof fbq !== 'undefined') {
                 const productNames = items.map(item => item.nombre).join(', ');
-                
+
+                console.log('📊 Enviando evento Purchase a Meta...');
+
                 fbq('track', 'Purchase', {
                     value: total,
                     currency: 'COP',
@@ -1035,6 +1042,9 @@ async function submitOrderModal(phone, name, email, address, city, neighborhood)
                     }))
                 });
                 console.log('📊 Meta Pixel: Purchase -', productNames);
+                console.log('📊 Total:', total, 'COP');
+            } else {
+                console.log('❌ fbq no está disponible');
             }
 
             cart = [];
@@ -1044,9 +1054,11 @@ async function submitOrderModal(phone, name, email, address, city, neighborhood)
             closeCartModal();
             document.getElementById('successModal').style.display = 'block';
         } else {
+            console.log('❌ Error en el pedido:', result);
             showToast('Error al procesar el pedido');
         }
     } catch (error) {
+        console.log('❌ Error de conexión:', error);
         showToast('Error de conexión');
     }
 }
