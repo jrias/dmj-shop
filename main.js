@@ -1,11 +1,17 @@
+// ============================================
 // PRODUCTOS - PRECIOS REALES
+// ============================================
+
 const products = [
     { id: 1, name: "RoyceDerm Face Cream", price: 78000, image: "/Medios/Imagenes/royce.jpeg", color: "Silber", subtitle: "Tratamiento para Seborrheic Dermatitis", description: "Alivio calmante para enrojecimiento, descamación y placas. Fórmula avanzada para el cuidado de la piel sensible." },
     { id: 2, name: "Biotin Hair Serum", price: 72000, image: "/Medios/Imagenes/biotinrohs.jpeg", color: "Schwarz", subtitle: "Fortalecimiento y Crecimiento Capilar", description: "Fórmula con Biotina y Romero para fortalecer el cabello, estimular el crecimiento y prevenir la caída." },
     { id: 3, name: "Ranko Moisturizing Cream", price: 72000, image: "/Medios/Imagenes/rankomc.jpeg", color: "Gold", subtitle: "Hidratación Profunda", description: "Crema humectante de alta eficacia para una hidratación duradera. Ideal para pieles secas y sensibles." },
 ];
 
+// ============================================
 // DATOS DE PACKS CON PRECIOS REALES
+// ============================================
+
 const packsData = [
     {
         id: 1,
@@ -185,7 +191,6 @@ function addPackWithConfirm(productId, packIndex, packName) {
     const product = packsData.find(p => p.id === productId);
     if (!product) return;
     
-    // Generar el ID del nuevo pack
     let newItemId;
     if (packIndex !== undefined && packIndex !== null) {
         newItemId = `${productId}-${packIndex}`;
@@ -193,11 +198,9 @@ function addPackWithConfirm(productId, packIndex, packName) {
         newItemId = `${productId}-family`;
     }
     
-    // Verificar si el pack específico ya está en el carrito
     const existingItem = cart.find(item => item.id === newItemId);
     
     if (existingItem) {
-        // Si el pack ya existe, mostrar mensaje y aumentar cantidad
         showToast(`Ya tienes ${packName} en tu carrito. Se ha aumentado la cantidad.`);
         if (packIndex !== undefined && packIndex !== null) {
             addPackToCart(productId, packIndex);
@@ -207,13 +210,10 @@ function addPackWithConfirm(productId, packIndex, packName) {
         return;
     }
     
-    // Verificar si hay OTROS packs del mismo producto (no el mismo pack)
     const hasOtherPacks = cart.some(item => {
-        // El item es del mismo producto pero no es el mismo pack
         return (item.id.startsWith(`${productId}-`) || item.id === `${productId}`) && item.id !== newItemId;
     });
     
-    // Obtener el nombre del nuevo pack
     let newPackFullName = packName;
     if (packIndex !== undefined && packIndex !== null) {
         const pack = product.packs[packIndex];
@@ -223,10 +223,8 @@ function addPackWithConfirm(productId, packIndex, packName) {
     }
     
     if (hasOtherPacks) {
-        // Hay otros packs de este producto - preguntar si quiere agregar
         openConfirmModal(product.name, newPackFullName, productId, packIndex, packIndex === null);
     } else {
-        // No hay otros packs, agregar directamente
         if (packIndex !== undefined && packIndex !== null) {
             addPackToCart(productId, packIndex);
         } else {
@@ -318,12 +316,12 @@ function renderProductPacks(productId) {
                         </div>
                         ${pack.freeShipping ? `<div class="pack-shipping-badge">🚚 Envío gratis incluido</div>` : ''}
                         ${pack.savings > 0 ? `
-    <div class="pack-savings">
-        <span class="savings-label">🟢 AHORRAS</span>
-        <span class="savings-amount">$${pack.savings.toLocaleString()}</span>
-        <span class="savings-percent">${pack.savingsPercent}% dto.</span>
-    </div>
-` : ''}
+                            <div class="pack-savings">
+                                <span class="savings-label">🟢 AHORRAS</span>
+                                <span class="savings-amount">$${pack.savings.toLocaleString()}</span>
+                                <span class="savings-percent">${pack.savingsPercent}% dto.</span>
+                            </div>
+                        ` : ''}
                     </div>
                 `).join('')}
                 <div class="pack-family" onclick="addPackWithConfirm(${productData.id}, null, '${productData.family.name}')">
@@ -387,13 +385,12 @@ function renderPacks() {
                         </div>
                         ${pack.freeShipping ? `<div class="pack-shipping-badge">🚚 Envío gratis incluido</div>` : ''}
                         ${pack.savings > 0 ? `
-    <div class="pack-savings">
-        <span class="savings-label">🟢 AHORRAS</span>
-        <span class="savings-amount">$${pack.savings.toLocaleString()}</span>
-        <span class="savings-percent">${pack.savingsPercent}% dto.</span>
-    </div>
-` : ''}
-                        
+                            <div class="pack-savings">
+                                <span class="savings-label">🟢 AHORRAS</span>
+                                <span class="savings-amount">$${pack.savings.toLocaleString()}</span>
+                                <span class="savings-percent">${pack.savingsPercent}% dto.</span>
+                            </div>
+                        ` : ''}
                     </div>
                 `).join('')}
                 <div class="pack-family" onclick="addPackWithConfirm(${product.id}, null, '${product.family.name}')">
@@ -542,6 +539,17 @@ function addToCart(productId) {
             quantity: 1,
             image: product.image,
             color: product.color
+        });
+    }
+
+    // ✅ Evento de Meta Pixel - AddToCart
+    if (typeof fbq !== 'undefined') {
+        fbq('track', 'AddToCart', {
+            content_name: product.name,
+            content_ids: [productId],
+            content_type: 'product',
+            value: product.price,
+            currency: 'MXN'
         });
     }
 
@@ -876,6 +884,16 @@ function openCheckout() {
     }
     closeCart();
     openCartModal();
+    
+    // ✅ Evento de Meta Pixel - InitiateCheckout
+    if (typeof fbq !== 'undefined') {
+        const total = cart.reduce((sum, i) => sum + (i.price * (i.quantity || 1)), 0);
+        fbq('track', 'InitiateCheckout', {
+            value: total,
+            currency: 'MXN',
+            num_items: cart.length
+        });
+    }
 }
 
 function closeModals() {
@@ -960,6 +978,17 @@ async function submitOrderModal(phone, name, email, address, city, neighborhood)
         });
         const result = await response.json();
         if (response.ok && result.exito) {
+            // ✅ Evento de Meta Pixel - Purchase
+            if (typeof fbq !== 'undefined') {
+                fbq('track', 'Purchase', {
+                    value: total,
+                    currency: 'MXN',
+                    content_ids: items.map(item => item.id),
+                    content_type: 'product',
+                    num_items: items.length
+                });
+            }
+            
             cart = [];
             saveCart();
             updateCartDisplay();
@@ -1008,7 +1037,6 @@ document.addEventListener('DOMContentLoaded', function () {
     if (acceptBtn) {
         acceptBtn.addEventListener('click', function () {
             if (pendingProductId !== null) {
-                // Agregar el nuevo pack SIN eliminar el existente
                 if (pendingPackIndex !== undefined && pendingPackIndex !== null) {
                     addPackToCart(pendingProductId, pendingPackIndex);
                 } else if (pendingIsFamily) {
